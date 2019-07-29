@@ -23,7 +23,7 @@ class AddressBookEndpointMixin(object):
         params = {
             'contacts': json.dumps(contacts),
             '_uuid': self.uuid,
-            '_csrftoken': self.csrftoken
+            '_csrftoken': self.csrftoken,
         }
         if kwargs:
             params.update(kwargs)
@@ -40,6 +40,6 @@ class AddressBookEndpointMixin(object):
         params = {
             '_uid': self.authenticated_user_id,
             '_uuid': self.uuid,
-            '_csrftoken': self.csrftoken
+            '_csrftoken': self.csrftoken,
         }
         return self._call_api(endpoint, params=params, unsigned=True)

@@ -8,18 +8,34 @@ import re
 import warnings
 
 from private import (
-    AccountTests, CollectionsTests, DiscoverTests,
-    FeedTests, FriendshipTests, LiveTests,
-    LocationTests, MediaTests, MiscTests,
-    TagsTests, UploadTests, UsersTests,
-    UsertagsTests, HighlightsTests,
-    ClientTests, ApiUtilsTests, CompatPatchTests,
+    AccountTests,
+    CollectionsTests,
+    DiscoverTests,
+    FeedTests,
+    FriendshipTests,
+    LiveTests,
+    LocationTests,
+    MediaTests,
+    MiscTests,
+    TagsTests,
+    UploadTests,
+    UsersTests,
+    UsertagsTests,
+    HighlightsTests,
+    ClientTests,
+    ApiUtilsTests,
+    CompatPatchTests,
     IGTVTests,
 )
 
 from private import (
-    Client, ClientError, ClientLoginError, ClientCookieExpiredError,
-    __version__, to_json, from_json
+    Client,
+    ClientError,
+    ClientLoginError,
+    ClientCookieExpiredError,
+    __version__,
+    to_json,
+    from_json,
 )
 
 
@@ -34,7 +50,9 @@ if __name__ == '__main__':
     #   python test.py -u "xxx" -p "xxx" -settings "saved_auth.json" -save
 
     parser = argparse.ArgumentParser(description='Test instapi.py')
-    parser.add_argument('-settings', '--settings', dest='settings_file_path', type=str, required=True)
+    parser.add_argument(
+        '-settings', '--settings', dest='settings_file_path', type=str, required=True
+    )
     parser.add_argument('-u', '--username', dest='username', type=str, required=True)
     parser.add_argument('-p', '--password', dest='password', type=str, required=True)
     parser.add_argument('-d', '--device_id', dest='device_id', type=str)
@@ -63,7 +81,7 @@ if __name__ == '__main__':
         'android_version': 23,
         'phone_dpi': '640dpi',
         'phone_resolution': '1440x2392',
-        'phone_chipset': 'h1'
+        'phone_chipset': 'h1',
     }
 
     api = None
@@ -74,7 +92,10 @@ if __name__ == '__main__':
             # Example of how to generate a uuid.
             # You can generate a fixed uuid if you use a fixed value seed
             uuid = Client.generate_uuid(
-                seed='{pw!s}.{usr!s}.{ts!s}'.format(**{'pw': args.username, 'usr': args.password, 'ts': ts_seed}))
+                seed='{pw!s}.{usr!s}.{ts!s}'.format(
+                    **{'pw': args.username, 'usr': args.password, 'ts': ts_seed}
+                )
+            )
         else:
             uuid = args.uuid
 
@@ -82,18 +103,25 @@ if __name__ == '__main__':
             # Example of how to generate a device id.
             # You can generate a fixed device id if you use a fixed value seed
             device_id = Client.generate_deviceid(
-                seed='{usr!s}.{ts!s}.{pw!s}'.format(**{'pw': args.password, 'usr': args.username, 'ts': ts_seed}))
+                seed='{usr!s}.{ts!s}.{pw!s}'.format(
+                    **{'pw': args.password, 'usr': args.username, 'ts': ts_seed}
+                )
+            )
         else:
             device_id = args.device_id
 
         # start afresh without existing auth
         try:
             api = Client(
-                args.username, args.password,
-                auto_patch=True, drop_incompat_keys=False,
-                guid=uuid, device_id=device_id,
+                args.username,
+                args.password,
+                auto_patch=True,
+                drop_incompat_keys=False,
+                guid=uuid,
+                device_id=device_id,
                 # custom device settings
-                **my_custom_device)
+                **my_custom_device
+            )
 
         except ClientLoginError:
             print('Login Error. Please check your username and password.')
@@ -113,10 +141,13 @@ if __name__ == '__main__':
             for k in ['app_version', 'signature_key', 'key_version', 'ig_capabilities']:
                 cached_auth.pop(k, None)
             api = Client(
-                args.username, args.password,
-                auto_patch=True, drop_incompat_keys=False,
+                args.username,
+                args.password,
+                auto_patch=True,
+                drop_incompat_keys=False,
                 settings=cached_auth,
-                **my_custom_device)
+                **my_custom_device
+            )
 
         except ClientCookieExpiredError:
             print('Cookie Expired. Please discard cached auth and login again.')
@@ -161,5 +192,8 @@ if __name__ == '__main__':
         sys.exit(not result.wasSuccessful())
 
     except ClientError as e:
-        print('Unexpected ClientError {0!s} (Code: {1:d}, Response: {2!s})'.format(
-            e.msg, e.code, e.error_response))
+        print(
+            'Unexpected ClientError {0!s} (Code: {1:d}, Response: {2!s})'.format(
+                e.msg, e.code, e.error_response
+            )
+        )

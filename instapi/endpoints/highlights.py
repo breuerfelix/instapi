@@ -49,8 +49,8 @@ class HighlightsEndpointsMixin(object):
         return self._call_api(endpoint)
 
     def highlight_create(
-            self, media_ids, cover_media_id=None,
-            title='Highlights', source='self_profile'):
+        self, media_ids, cover_media_id=None, title='Highlights', source='self_profile'
+    ):
         """
         Create a new highlight
 
@@ -74,7 +74,8 @@ class HighlightsEndpointsMixin(object):
         cover = {
             'media_id': cover_media_id,
             'crop_rect': json.dumps(
-                [0.0, 0.21830457, 1.0, 0.78094524], separators=(',', ':'))
+                [0.0, 0.21830457, 1.0, 0.78094524], separators=(',', ':')
+            ),
         }
         params = {
             'media_ids': json.dumps(media_ids, separators=(',', ':')),
@@ -86,9 +87,14 @@ class HighlightsEndpointsMixin(object):
         return self._call_api('highlights/create_reel/', params=params)
 
     def highlight_edit(
-            self, highlight_id, cover_media_id=None,
-            added_media_ids=[], removed_media_ids=[],
-            title=None, source='story_viewer'):
+        self,
+        highlight_id,
+        cover_media_id=None,
+        added_media_ids=[],
+        removed_media_ids=[],
+        title=None,
+        source='story_viewer',
+    ):
         """
         Edits a highlight
 
@@ -131,7 +137,8 @@ class HighlightsEndpointsMixin(object):
             cover = {
                 'media_id': cover_media_id,
                 'crop_rect': json.dumps(
-                    [0.0, 0.21830457, 1.0, 0.78094524], separators=(',', ':'))
+                    [0.0, 0.21830457, 1.0, 0.78094524], separators=(',', ':')
+                ),
             }
             params['cover'] = json.dumps(cover, separators=(',', ':'))
 

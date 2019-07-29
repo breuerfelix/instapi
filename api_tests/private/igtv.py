@@ -1,4 +1,3 @@
-
 from .common import ApiTestBase
 
 
@@ -8,18 +7,9 @@ class IGTVTests(ApiTestBase):
     @staticmethod
     def init_all(api):
         return [
-            {
-                'name': 'test_tvchannel',
-                'test': IGTVTests('test_tvchannel', api)
-            },
-            {
-                'name': 'test_tvguide',
-                'test': IGTVTests('test_tvguide', api)
-            },
-            {
-                'name': 'test_search_igtv',
-                'test': IGTVTests('test_search_igtv', api)
-            },
+            {'name': 'test_tvchannel', 'test': IGTVTests('test_tvchannel', api)},
+            {'name': 'test_tvguide', 'test': IGTVTests('test_tvguide', api)},
+            {'name': 'test_search_igtv', 'test': IGTVTests('test_search_igtv', api)},
         ]
 
     def test_tvchannel(self):

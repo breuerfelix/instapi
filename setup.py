@@ -3,9 +3,11 @@ from os import path
 
 here = path.abspath(path.dirname(__file__))
 
+
 def readall(*args):
     with open(path.join(here, *args), encoding='utf-8') as fp:
         return fp.read()
+
 
 with open('requirements.test.txt') as f:
     test_deps = f.read().splitlines()
@@ -28,14 +30,12 @@ setup(
     long_description_content_type='text/markdown',
     packages=find_packages(),
     python_requires=">=3",
-    package_data={
-        'instapi': ["version.txt"]
-    },
+    package_data={'instapi': ["version.txt"]},
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Programming Language :: Python :: 3',
-    ]
+    ],
 )

@@ -11,64 +11,43 @@ class FeedTests(ApiTestBase):
         return [
             {
                 'name': 'test_feed_timeline',
-                'test': FeedTests('test_feed_timeline', api)
+                'test': FeedTests('test_feed_timeline', api),
             },
-            {
-                'name': 'test_feed_liked',
-                'test': FeedTests('test_feed_liked', api)
-            },
-            {
-                'name': 'test_self_feed',
-                'test': FeedTests('test_self_feed', api)
-            },
+            {'name': 'test_feed_liked', 'test': FeedTests('test_feed_liked', api)},
+            {'name': 'test_self_feed', 'test': FeedTests('test_self_feed', api)},
             {
                 'name': 'test_user_feed',
-                'test': FeedTests('test_user_feed', api, user_id='124317')
+                'test': FeedTests('test_user_feed', api, user_id='124317'),
             },
             {
                 'name': 'test_username_feed',
-                'test': FeedTests('test_username_feed', api, user_id='maruhanamogu')
+                'test': FeedTests('test_username_feed', api, user_id='maruhanamogu'),
             },
             {
                 'name': 'test_private_user_feed',
-                'test': FeedTests('test_private_user_feed', api, user_id='426095486')
+                'test': FeedTests('test_private_user_feed', api, user_id='426095486'),
             },
-            {
-                'name': 'test_reels_tray',
-                'test': FeedTests('test_reels_tray', api)
-            },
+            {'name': 'test_reels_tray', 'test': FeedTests('test_reels_tray', api)},
             {
                 'name': 'test_user_reel_media',
-                'test': FeedTests('test_user_reel_media', api, user_id='329452045')
+                'test': FeedTests('test_user_reel_media', api, user_id='329452045'),
             },
             {
                 'name': 'test_reels_media',
-                'test': FeedTests('test_reels_media', api, user_id='329452045')
+                'test': FeedTests('test_reels_media', api, user_id='329452045'),
             },
             {
                 'name': 'test_user_story_feed',
-                'test': FeedTests('test_user_story_feed', api, user_id='329452045')
+                'test': FeedTests('test_user_story_feed', api, user_id='329452045'),
             },
             {
                 'name': 'test_location_feed',
-                'test': FeedTests('test_location_feed', api)
+                'test': FeedTests('test_location_feed', api),
             },
-            {
-                'name': 'test_feed_tag',
-                'test': FeedTests('test_feed_tag', api)
-            },
-            {
-                'name': 'test_saved_feed',
-                'test': FeedTests('test_saved_feed', api)
-            },
-            {
-                'name': 'test_feed_popular',
-                'test': FeedTests('test_feed_popular', api)
-            },
-            {
-                'name': 'test_feed_only_me',
-                'test': FeedTests('test_feed_only_me', api)
-            },
+            {'name': 'test_feed_tag', 'test': FeedTests('test_feed_tag', api)},
+            {'name': 'test_saved_feed', 'test': FeedTests('test_saved_feed', api)},
+            {'name': 'test_feed_popular', 'test': FeedTests('test_feed_popular', api)},
+            {'name': 'test_feed_only_me', 'test': FeedTests('test_feed_only_me', api)},
         ]
 
     def test_feed_liked(self):
@@ -79,7 +58,9 @@ class FeedTests(ApiTestBase):
         results = self.api.feed_timeline()
         self.assertEqual(results.get('status'), 'ok')
         self.assertGreater(len(results.get('feed_items', [])), 0, 'No items returned.')
-        self.assertIsNotNone(results.get('feed_items', [])[0]['media_or_ad'].get('link'))
+        self.assertIsNotNone(
+            results.get('feed_items', [])[0]['media_or_ad'].get('link')
+        )
 
     @unittest.skip('Deprecated.')
     def test_feed_popular(self):
@@ -124,9 +105,15 @@ class FeedTests(ApiTestBase):
         results = self.api.feed_tag('catsofinstagram', rank_token)
         self.assertEqual(results.get('status'), 'ok')
         self.assertGreater(len(results.get('items', [])), 0, 'No items returned.')
-        self.assertGreater(len(results.get('ranked_items', [])), 0, 'No ranked_items returned.')
-        if results.get('story'):    # Returned only in version >= 10.22.0
-            self.assertGreater(len(results.get('story', {}).get('items', [])), 0, 'No story items returned.')
+        self.assertGreater(
+            len(results.get('ranked_items', [])), 0, 'No ranked_items returned.'
+        )
+        if results.get('story'):  # Returned only in version >= 10.22.0
+            self.assertGreater(
+                len(results.get('story', {}).get('items', [])),
+                0,
+                'No story items returned.',
+            )
 
     def test_user_story_feed(self):
         results = self.api.user_story_feed(self.test_user_id)
@@ -140,9 +127,15 @@ class FeedTests(ApiTestBase):
         results = self.api.feed_location(218551172247829, rank_token)
         self.assertEqual(results.get('status'), 'ok')
         self.assertGreater(len(results.get('items', [])), 0, 'No items returned.')
-        self.assertGreater(len(results.get('ranked_items', [])), 0, 'No ranked_items returned.')
-        if results.get('story'):    # Returned only in version >= 10.22.0
-            self.assertGreater(len(results.get('story', {}).get('items', [])), 0, 'No story items returned.')
+        self.assertGreater(
+            len(results.get('ranked_items', [])), 0, 'No ranked_items returned.'
+        )
+        if results.get('story'):  # Returned only in version >= 10.22.0
+            self.assertGreater(
+                len(results.get('story', {}).get('items', [])),
+                0,
+                'No story items returned.',
+            )
 
     def test_saved_feed(self):
         results = self.api.saved_feed()

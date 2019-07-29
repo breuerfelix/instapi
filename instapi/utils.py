@@ -33,18 +33,29 @@ def gen_user_breadcrumb(size):
 
     text_change_event_count = max(1, size / randint(3, 5))
 
-    data = '{size!s} {elapsed!s} {count!s} {dt!s}'.format(**{
-        'size': size, 'elapsed': time_elapsed, 'count': text_change_event_count, 'dt': dt
-    })
+    data = '{size!s} {elapsed!s} {count!s} {dt!s}'.format(
+        **{
+            'size': size,
+            'elapsed': time_elapsed,
+            'count': text_change_event_count,
+            'dt': dt,
+        }
+    )
     return '{0!s}\n{1!s}\n'.format(
-        base64.b64encode(hmac.new(key.encode('ascii'), data.encode('ascii'), digestmod=hashlib.sha256).digest()),
-        base64.b64encode(data.encode('ascii')))
+        base64.b64encode(
+            hmac.new(
+                key.encode('ascii'), data.encode('ascii'), digestmod=hashlib.sha256
+            ).digest()
+        ),
+        base64.b64encode(data.encode('ascii')),
+    )
 
 
 class Chunk(object):
     """
     Simple object class to encapulate an upload Chunk
     """
+
     def __init__(self, index, start, end, total):
         self.index = index
         self.start = start
@@ -101,7 +112,7 @@ def chunk_generator(chunk_count, chunk_size, file_data):
             file_data.seek(chunk_info.start, os.SEEK_SET)
             yield chunk_info, file_data.read(chunk_info.length)
         else:
-            yield chunk_info, file_data[chunk_info.start: chunk_info.end]
+            yield chunk_info, file_data[chunk_info.start : chunk_info.end]
 
 
 def max_chunk_size_generator(chunk_size, file_data):
@@ -169,15 +180,22 @@ def ig_chunk_generator(file_data, max_chunk_size=(500 * 1024)):
         else:
             chunk_elapsed_time = datetime.now() - last_yield_dt
             try:
-                new_chunk_size = 5000 * chunks_generated[-1] / int(chunk_elapsed_time.total_seconds() * 1000)
+                new_chunk_size = (
+                    5000
+                    * chunks_generated[-1]
+                    / int(chunk_elapsed_time.total_seconds() * 1000)
+                )
             except ZeroDivisionError:
                 new_chunk_size = max_chunk_size
             new_chunk_size = min(max_chunk_size, new_chunk_size)
             chunk_start = sum(chunks_generated)
             chunk_end = min(chunk_start + new_chunk_size, total_len)
             chunk = Chunk(
-                len(chunks_generated), sum(chunks_generated), chunk_end,
-                0 if chunk_end < total_len else len(chunks_generated) + 1)
+                len(chunks_generated),
+                sum(chunks_generated),
+                chunk_end,
+                0 if chunk_end < total_len else len(chunks_generated) + 1,
+            )
             chunks_generated.append(chunk.length)
 
         last_yield_dt = datetime.now()
@@ -185,7 +203,7 @@ def ig_chunk_generator(file_data, max_chunk_size=(500 * 1024)):
             file_data.seek(chunk.start, os.SEEK_SET)
             yield chunk, file_data.read(chunk.length)
         else:
-            yield chunk, file_data[chunk.start: chunk.end]
+            yield chunk, file_data[chunk.start : chunk.end]
 
 
 class InstagramID(object):
@@ -193,6 +211,7 @@ class InstagramID(object):
     Utility class to convert between IG's internal numeric ID and the shortcode used in weblinks.
     Does NOT apply to private accounts.
     """
+
     ENCODING_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'
 
     @staticmethod
@@ -217,7 +236,7 @@ class InstagramID(object):
         num = 0
         idx = 0
         for char in shortcode:
-            power = (strlen - (idx + 1))
+            power = strlen - (idx + 1)
             num += alphabet.index(char) * (base ** power)
             idx += 1
         return num
@@ -230,7 +249,9 @@ class InstagramID(object):
         :param media_id:
         :return:
         """
-        return 'https://www.instagram.com/p/{0!s}/'.format(cls.shorten_media_id(media_id))
+        return 'https://www.instagram.com/p/{0!s}/'.format(
+            cls.shorten_media_id(media_id)
+        )
 
     @classmethod
     def shorten_media_id(cls, media_id):

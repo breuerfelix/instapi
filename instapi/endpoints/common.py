@@ -1,4 +1,3 @@
-
 class ClientDeprecationWarning(DeprecationWarning):
     pass
 
@@ -14,23 +13,21 @@ class ClientExperimentalWarning(UserWarning):
 class MediaTypes(object):
     """Psuedo enum-ish/lookup class for media types."""
 
-    PHOTO = 1       #: Photo type
-    VIDEO = 2       #: Video type
-    CAROUSEL = 8    #: Carousel/Album type
+    PHOTO = 1  #: Photo type
+    VIDEO = 2  #: Video type
+    CAROUSEL = 8  #: Carousel/Album type
 
     ALL = (PHOTO, VIDEO, CAROUSEL)
 
-    __media_type_map = {
-        'image': PHOTO,
-        'video': VIDEO,
-        'carousel': CAROUSEL,
-    }
+    __media_type_map = {'image': PHOTO, 'video': VIDEO, 'carousel': CAROUSEL}
 
     @staticmethod
     def id_to_name(media_type_id):
         """Convert a media type ID to its name"""
         try:
-            return [k for k, v in MediaTypes.__media_type_map.items() if v == media_type_id][0]
+            return [
+                k for k, v in MediaTypes.__media_type_map.items() if v == media_type_id
+            ][0]
         except IndexError:
             raise ValueError('Invalid media ID')
 

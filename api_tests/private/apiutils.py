@@ -1,8 +1,11 @@
 import unittest
 
 from .common import (
-    InstagramID, MediaTypes, ig_chunk_generator,
-    max_chunk_size_generator, max_chunk_count_generator,
+    InstagramID,
+    MediaTypes,
+    ig_chunk_generator,
+    max_chunk_size_generator,
+    max_chunk_count_generator,
 )
 
 
@@ -12,30 +15,21 @@ class ApiUtilsTests(unittest.TestCase):
     @staticmethod
     def init_all():
         return [
-            {
-                'name': 'test_expand_code',
-                'test': ApiUtilsTests('test_expand_code')
-            },
-            {
-                'name': 'test_shorten_id',
-                'test': ApiUtilsTests('test_shorten_id')
-            },
+            {'name': 'test_expand_code', 'test': ApiUtilsTests('test_expand_code')},
+            {'name': 'test_shorten_id', 'test': ApiUtilsTests('test_shorten_id')},
             {
                 'name': 'test_shorten_media_id',
-                'test': ApiUtilsTests('test_shorten_media_id')
+                'test': ApiUtilsTests('test_shorten_media_id'),
             },
             {
                 'name': 'test_weblink_from_media_id',
-                'test': ApiUtilsTests('test_weblink_from_media_id')
+                'test': ApiUtilsTests('test_weblink_from_media_id'),
             },
             {
                 'name': 'test_chunk_generators',
-                'test': ApiUtilsTests('test_chunk_generators')
+                'test': ApiUtilsTests('test_chunk_generators'),
             },
-            {
-                'name': 'test_mediatypes',
-                'test': ApiUtilsTests('test_mediatypes')
-            },
+            {'name': 'test_mediatypes', 'test': ApiUtilsTests('test_mediatypes')},
         ]
 
     def __init__(self, testname):
@@ -65,30 +59,39 @@ class ApiUtilsTests(unittest.TestCase):
             chunks_generated.append(chunk)
 
         self.assertEqual(
-            sum([c.length for c in chunks_generated]), len(file_data),
-            'ig_chunk_generator: incorrect chunk total')
+            sum([c.length for c in chunks_generated]),
+            len(file_data),
+            'ig_chunk_generator: incorrect chunk total',
+        )
         self.assertEqual(
-            len(chunks_generated), 3, 'ig_chunk_generator: incorrect chunk count')
+            len(chunks_generated), 3, 'ig_chunk_generator: incorrect chunk count'
+        )
 
         chunks_generated = []
         for chunk, data in max_chunk_size_generator(200000, file_data):
             self.assertEqual(chunk.length, len(data))
             chunks_generated.append(chunk)
         self.assertEqual(
-            sum([c.length for c in chunks_generated]), len(file_data),
-            'max_chunk_size_generator: incorrect chunk total')
+            sum([c.length for c in chunks_generated]),
+            len(file_data),
+            'max_chunk_size_generator: incorrect chunk total',
+        )
         self.assertEqual(
-            len(chunks_generated), 5, 'max_chunk_size_generator: incorrect chunk count')
+            len(chunks_generated), 5, 'max_chunk_size_generator: incorrect chunk count'
+        )
 
         chunks_generated = []
         for chunk, data in max_chunk_count_generator(4, file_data):
             self.assertEqual(chunk.length, len(data))
             chunks_generated.append(chunk)
         self.assertEqual(
-            sum([c.length for c in chunks_generated]), len(file_data),
-            'max_chunk_count_generator: incorrect chunk total')
+            sum([c.length for c in chunks_generated]),
+            len(file_data),
+            'max_chunk_count_generator: incorrect chunk total',
+        )
         self.assertEqual(
-            len(chunks_generated), 4, 'max_chunk_count_generator: incorrect chunk count')
+            len(chunks_generated), 4, 'max_chunk_count_generator: incorrect chunk count'
+        )
 
     def test_mediatypes(self):
         self.assertEqual(MediaTypes.id_to_name(MediaTypes.PHOTO), 'image')

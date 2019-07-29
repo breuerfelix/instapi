@@ -10,6 +10,7 @@ from .compat import compat_cookiejar, compat_pickle
 class ClientCookieJar(compat_cookiejar.CookieJar):
     """Custom CookieJar that can be pickled to/from strings
     """
+
     def __init__(self, cookie_string=None, policy=None):
         compat_cookiejar.CookieJar.__init__(self, policy)
         if cookie_string:
@@ -39,9 +40,12 @@ class MultipartFormDataEncoder(object):
     Modified from
     http://stackoverflow.com/questions/1270518/python-standard-library-to-post-multipart-form-data-encoded-data
     """
+
     def __init__(self, boundary=None):
-        self.boundary = boundary or \
-            ''.join(random.choice(string.ascii_letters + string.digits + '_-') for _ in range(30))
+        self.boundary = boundary or ''.join(
+            random.choice(string.ascii_letters + string.digits + '_-')
+            for _ in range(30)
+        )
         self.content_type = 'multipart/form-data; boundary={}'.format(self.boundary)
 
     @classmethod
@@ -62,7 +66,9 @@ class MultipartFormDataEncoder(object):
         for (key, value) in fields:
             key = self.u(key)
             yield encoder('--{}\r\n'.format(self.boundary))
-            yield encoder(self.u('Content-Disposition: form-data; name="{}"\r\n').format(key))
+            yield encoder(
+                self.u('Content-Disposition: form-data; name="{}"\r\n').format(key)
+            )
             yield encoder('\r\n')
             if isinstance(value, (int, float)):
                 value = str(value)
@@ -72,9 +78,18 @@ class MultipartFormDataEncoder(object):
             key = self.u(key)
             filename = self.u(filename)
             yield encoder('--{}\r\n'.format(self.boundary))
-            yield encoder(self.u('Content-Disposition: form-data; name="{}"; filename="{}"\r\n').format(key, filename))
-            yield encoder('Content-Type: {}\r\n'.format(
-                contenttype or mimetypes.guess_type(filename)[0] or 'application/octet-stream'))
+            yield encoder(
+                self.u(
+                    'Content-Disposition: form-data; name="{}"; filename="{}"\r\n'
+                ).format(key, filename)
+            )
+            yield encoder(
+                'Content-Type: {}\r\n'.format(
+                    contenttype
+                    or mimetypes.guess_type(filename)[0]
+                    or 'application/octet-stream'
+                )
+            )
             yield encoder('Content-Transfer-Encoding: binary\r\n')
             yield encoder('\r\n')
             yield (fd, len(fd))

@@ -11,23 +11,22 @@ class DiscoverTests(ApiTestBase):
         return [
             {
                 'name': 'test_discover_channels_home',
-                'test': DiscoverTests('test_discover_channels_home', api)
+                'test': DiscoverTests('test_discover_channels_home', api),
             },
             {
                 'name': 'test_discover_chaining',
-                'test': DiscoverTests('test_discover_chaining', api, user_id='329452045')
+                'test': DiscoverTests(
+                    'test_discover_chaining', api, user_id='329452045'
+                ),
             },
-            {
-                'name': 'test_explore',
-                'test': DiscoverTests('test_explore', api)
-            },
+            {'name': 'test_explore', 'test': DiscoverTests('test_explore', api)},
             {
                 'name': 'test_discover_top_live',
-                'test': DiscoverTests('test_discover_top_live', api)
+                'test': DiscoverTests('test_discover_top_live', api),
             },
             {
                 'name': 'test_top_live_status',
-                'test': DiscoverTests('test_top_live_status', api)
+                'test': DiscoverTests('test_top_live_status', api),
             },
         ]
 
@@ -58,8 +57,16 @@ class DiscoverTests(ApiTestBase):
         if broadcast_ids:
             results = self.api.top_live_status(broadcast_ids)
             self.assertEqual(results.get('status'), 'ok')
-            self.assertGreater(len(results.get('broadcast_status_items', [])), 0, 'No broadcast_status_items returned.')
+            self.assertGreater(
+                len(results.get('broadcast_status_items', [])),
+                0,
+                'No broadcast_status_items returned.',
+            )
 
             results = self.api.top_live_status(str(broadcast_ids[0]))
             self.assertEqual(results.get('status'), 'ok')
-            self.assertGreater(len(results.get('broadcast_status_items', [])), 0, 'No broadcast_status_items returned.')
+            self.assertGreater(
+                len(results.get('broadcast_status_items', [])),
+                0,
+                'No broadcast_status_items returned.',
+            )

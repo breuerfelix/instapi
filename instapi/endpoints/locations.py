@@ -30,7 +30,9 @@ class LocationsEndpointsMixin(object):
                   }
                 }
         """
-        endpoint = 'locations/{location_id!s}/info/'.format(**{'location_id': location_id})
+        endpoint = 'locations/{location_id!s}/info/'.format(
+            **{'location_id': location_id}
+        )
         return self._call_api(endpoint)
 
     def location_related(self, location_id, **kwargs):
@@ -40,10 +42,15 @@ class LocationsEndpointsMixin(object):
         :param location_id:
         :return:
         """
-        endpoint = 'locations/{location_id!s}/related/'.format(**{'location_id': location_id})
+        endpoint = 'locations/{location_id!s}/related/'.format(
+            **{'location_id': location_id}
+        )
         query = {
-            'visited': json.dumps([{'id': location_id, 'type': 'location'}], separators=(',', ':')),
-            'related_types': json.dumps(['location'], separators=(',', ':'))}
+            'visited': json.dumps(
+                [{'id': location_id, 'type': 'location'}], separators=(',', ':')
+            ),
+            'related_types': json.dumps(['location'], separators=(',', ':')),
+        }
         query.update(kwargs)
         return self._call_api(endpoint, query=query)
 
@@ -60,7 +67,7 @@ class LocationsEndpointsMixin(object):
             'rank_token': self.rank_token,
             'latitude': latitude,
             'longitude': longitude,
-            'timestamp': int(time.time())
+            'timestamp': int(time.time()),
         }
         if query:
             query_params['search_query'] = query
@@ -112,12 +119,10 @@ class LocationsEndpointsMixin(object):
             raise ValueError('Invalid tab: {}'.format(tab))
 
         extract_media_only = kwargs.pop('extract', False)
-        endpoint = 'locations/{location_id!s}/sections/'.format(**{'location_id': location_id})
-        params = {
-            'rank_token': rank_token,
-            'tab': tab,
-            'session_id': self.session_id,
-        }
+        endpoint = 'locations/{location_id!s}/sections/'.format(
+            **{'location_id': location_id}
+        )
+        params = {'rank_token': rank_token, 'tab': tab, 'session_id': self.session_id}
 
         # explicitly set known paging parameters to avoid triggering server-side errors
         if kwargs.get('max_id'):
@@ -125,7 +130,9 @@ class LocationsEndpointsMixin(object):
         if kwargs.get('page'):
             params['page'] = kwargs.pop('page')
         if kwargs.get('next_media_ids'):
-            params['next_media_ids'] = json.dumps(kwargs.pop('next_media_ids'), separators=(',', ':'))
+            params['next_media_ids'] = json.dumps(
+                kwargs.pop('next_media_ids'), separators=(',', ':')
+            )
         kwargs.pop('max_id', None)
         kwargs.pop('page', None)
         kwargs.pop('next_media_ids', None)
@@ -137,7 +144,9 @@ class LocationsEndpointsMixin(object):
             for s in results.get('sections', []):
                 for m in s.get('layout_content', {}).get('medias', []):
                     if m.get('media'):
-                        ClientCompatPatch.media(m['media'], drop_incompat_keys=self.drop_incompat_keys)
+                        ClientCompatPatch.media(
+                            m['media'], drop_incompat_keys=self.drop_incompat_keys
+                        )
                         if extract_media_only:
                             extracted_medias.append(m['media'])
         if extract_media_only:
@@ -153,7 +162,9 @@ class LocationsEndpointsMixin(object):
             :meth:`generate_uuid`. You should use the same rank_token for paging through a single location.
         :return:
         """
-        endpoint = 'locations/{location_id!s}/story/'.format(**{'location_id': location_id})
+        endpoint = 'locations/{location_id!s}/story/'.format(
+            **{'location_id': location_id}
+        )
         # params = {
         #     'rank_token': rank_token,
         #     'tab': tab,

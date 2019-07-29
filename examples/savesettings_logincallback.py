@@ -5,14 +5,21 @@ import os.path
 import logging
 import argparse
 from instapi import (
-    Client, ClientError, ClientLoginError,
-    ClientCookieExpiredError, ClientLoginRequiredError,
-    __version__ as client_version)
+    Client,
+    ClientError,
+    ClientLoginError,
+    ClientCookieExpiredError,
+    ClientLoginRequiredError,
+    __version__ as client_version,
+)
+
 
 def to_json(python_object):
     if isinstance(python_object, bytes):
-        return {'__class__': 'bytes',
-                '__value__': codecs.encode(python_object, 'base64').decode()}
+        return {
+            '__class__': 'bytes',
+            '__value__': codecs.encode(python_object, 'base64').decode(),
+        }
     raise TypeError(repr(python_object) + ' is not JSON serializable')
 
 
@@ -37,8 +44,12 @@ if __name__ == '__main__':
 
     # Example command:
     # python examples/savesettings_logincallback.py -u "yyy" -p "zzz" -settings "test_credentials.json"
-    parser = argparse.ArgumentParser(description='login callback and save settings demo')
-    parser.add_argument('-settings', '--settings', dest='settings_file_path', type=str, required=True)
+    parser = argparse.ArgumentParser(
+        description='login callback and save settings demo'
+    )
+    parser.add_argument(
+        '-settings', '--settings', dest='settings_file_path', type=str, required=True
+    )
     parser.add_argument('-u', '--username', dest='username', type=str, required=True)
     parser.add_argument('-p', '--password', dest='password', type=str, required=True)
     parser.add_argument('-debug', '--debug', action='store_true')
@@ -59,8 +70,10 @@ if __name__ == '__main__':
 
             # login new
             api = Client(
-                args.username, args.password,
-                on_login=lambda x: onlogin_callback(x, args.settings_file_path))
+                args.username,
+                args.password,
+                on_login=lambda x: onlogin_callback(x, args.settings_file_path),
+            )
         else:
             with open(settings_file) as file_data:
                 cached_settings = json.load(file_data, object_hook=from_json)
@@ -68,9 +81,7 @@ if __name__ == '__main__':
 
             device_id = cached_settings.get('device_id')
             # reuse auth settings
-            api = Client(
-                args.username, args.password,
-                settings=cached_settings)
+            api = Client(args.username, args.password, settings=cached_settings)
 
     except (ClientCookieExpiredError, ClientLoginRequiredError) as e:
         print('ClientCookieExpiredError/ClientLoginRequiredError: {0!s}'.format(e))
@@ -78,15 +89,21 @@ if __name__ == '__main__':
         # Login expired
         # Do relogin but use default ua, keys and such
         api = Client(
-            args.username, args.password,
+            args.username,
+            args.password,
             device_id=device_id,
-            on_login=lambda x: onlogin_callback(x, args.settings_file_path))
+            on_login=lambda x: onlogin_callback(x, args.settings_file_path),
+        )
 
     except ClientLoginError as e:
         print('ClientLoginError {0!s}'.format(e))
         exit(9)
     except ClientError as e:
-        print('ClientError {0!s} (Code: {1:d}, Response: {2!s})'.format(e.msg, e.code, e.error_response))
+        print(
+            'ClientError {0!s} (Code: {1:d}, Response: {2!s})'.format(
+                e.msg, e.code, e.error_response
+            )
+        )
         exit(9)
     except Exception as e:
         print('Unexpected Exception: {0!s}'.format(e))
@@ -94,7 +111,13 @@ if __name__ == '__main__':
 
     # Show when login expires
     cookie_expiry = api.cookie_jar.auth_expires
-    print('Cookie Expiry: {0!s}'.format(datetime.datetime.fromtimestamp(cookie_expiry).strftime('%Y-%m-%dT%H:%M:%SZ')))
+    print(
+        'Cookie Expiry: {0!s}'.format(
+            datetime.datetime.fromtimestamp(cookie_expiry).strftime(
+                '%Y-%m-%dT%H:%M:%SZ'
+            )
+        )
+    )
 
     # Call the api
     results = api.tag_search('cats')

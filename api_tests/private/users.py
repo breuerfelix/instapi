@@ -1,8 +1,6 @@
 import unittest
 
-from .common import (
-    ApiTestBase, compat_mock, ClientError
-)
+from .common import ApiTestBase, compat_mock, ClientError
 
 
 class UsersTests(ApiTestBase):
@@ -13,48 +11,45 @@ class UsersTests(ApiTestBase):
         return [
             {
                 'name': 'test_user_info',
-                'test': UsersTests('test_user_info', api, user_id='124317')
+                'test': UsersTests('test_user_info', api, user_id='124317'),
             },
             {
                 # private user
                 'name': 'test_user_info2',
-                'test': UsersTests('test_user_info', api, user_id='426095486')
+                'test': UsersTests('test_user_info', api, user_id='426095486'),
             },
             {
                 'name': 'test_deleted_user_info',
-                'test': UsersTests('test_deleted_user_info', api, user_id='322244991')
+                'test': UsersTests('test_deleted_user_info', api, user_id='322244991'),
             },
             {
                 'name': 'test_username_info',
-                'test': UsersTests('test_username_info', api, user_id='maruhanamogu')
+                'test': UsersTests('test_username_info', api, user_id='maruhanamogu'),
             },
             {
                 'name': 'test_user_detail_info',
-                'test': UsersTests('test_user_detail_info', api, user_id='124317')
+                'test': UsersTests('test_user_detail_info', api, user_id='124317'),
             },
-            {
-                'name': 'test_search_users',
-                'test': UsersTests('test_search_users', api)
-            },
+            {'name': 'test_search_users', 'test': UsersTests('test_search_users', api)},
             {
                 'name': 'test_user_map',
-                'test': UsersTests('test_user_map', api, user_id='2958144170')
+                'test': UsersTests('test_user_map', api, user_id='2958144170'),
             },
             {
                 'name': 'test_check_username',
-                'test': UsersTests('test_check_username', api)
+                'test': UsersTests('test_check_username', api),
             },
             {
                 'name': 'test_user_reel_settings',
-                'test': UsersTests('test_user_reel_settings', api)
+                'test': UsersTests('test_user_reel_settings', api),
             },
             {
                 'name': 'test_set_reel_settings_mock',
-                'test': UsersTests('test_set_reel_settings_mock', api)
+                'test': UsersTests('test_set_reel_settings_mock', api),
             },
             {
                 'name': 'test_blocked_user_list',
-                'test': UsersTests('test_blocked_user_list', api)
+                'test': UsersTests('test_blocked_user_list', api),
             },
         ]
 
@@ -76,7 +71,9 @@ class UsersTests(ApiTestBase):
     def test_user_detail_info(self):
         results = self.api.user_detail_info(self.test_user_id)
         self.assertEqual(results.get('status'), 'ok')
-        self.assertGreater(len(results.get('feed', {}).get('items', [])), 0, 'No items returned.')
+        self.assertGreater(
+            len(results.get('feed', {}).get('items', [])), 0, 'No items returned.'
+        )
 
     @unittest.skip('Deprecated.')
     def test_user_map(self):

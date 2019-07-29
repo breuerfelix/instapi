@@ -16,7 +16,9 @@ class UsersEndpointsMixin(object):
         """
         res = self._call_api('users/{user_id!s}/info/'.format(**{'user_id': user_id}))
         if self.auto_patch:
-            ClientCompatPatch.user(res['user'], drop_incompat_keys=self.drop_incompat_keys)
+            ClientCompatPatch.user(
+                res['user'], drop_incompat_keys=self.drop_incompat_keys
+            )
         return res
 
     def username_info(self, user_name):
@@ -25,9 +27,13 @@ class UsersEndpointsMixin(object):
         :param user_name:
         :return:
         """
-        res = self._call_api('users/{user_name!s}/usernameinfo/'.format(**{'user_name': user_name}))
+        res = self._call_api(
+            'users/{user_name!s}/usernameinfo/'.format(**{'user_name': user_name})
+        )
         if self.auto_patch:
-            ClientCompatPatch.user(res['user'], drop_incompat_keys=self.drop_incompat_keys)
+            ClientCompatPatch.user(
+                res['user'], drop_incompat_keys=self.drop_incompat_keys
+            )
         return res
 
     def user_detail_info(self, user_id, **kwargs):
@@ -41,21 +47,31 @@ class UsersEndpointsMixin(object):
             - **min_timestamp**: For pagination
         :return:
         """
-        warnings.warn('This endpoint is experimental. Do not use.', ClientExperimentalWarning)
+        warnings.warn(
+            'This endpoint is experimental. Do not use.', ClientExperimentalWarning
+        )
 
         endpoint = 'users/{user_id!s}/full_detail_info/'.format(**{'user_id': user_id})
         res = self._call_api(endpoint, query=kwargs)
         if self.auto_patch:
-            ClientCompatPatch.user(res['user_detail']['user'], drop_incompat_keys=self.drop_incompat_keys)
-            [ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
-             for m in res.get('feed', {}).get('items', [])]
-            [ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
-             for m in res.get('reel_feed', {}).get('items', [])]
-            [ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
-             for m in res.get('user_story', {}).get('reel', {}).get('items', [])]
+            ClientCompatPatch.user(
+                res['user_detail']['user'], drop_incompat_keys=self.drop_incompat_keys
+            )
+            [
+                ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
+                for m in res.get('feed', {}).get('items', [])
+            ]
+            [
+                ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
+                for m in res.get('reel_feed', {}).get('items', [])
+            ]
+            [
+                ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
+                for m in res.get('user_story', {}).get('reel', {}).get('items', [])
+            ]
         return res
 
-    def user_map(self, user_id):    # pragma: no cover
+    def user_map(self, user_id):  # pragma: no cover
         """
         Get a list of geo-tagged media from a user
 
@@ -64,7 +80,8 @@ class UsersEndpointsMixin(object):
         """
         warnings.warn(
             'This endpoint is believed to be obsolete. Do not use.',
-            ClientDeprecationWarning)
+            ClientDeprecationWarning,
+        )
 
         endpoint = 'maps/user/{user_id!s}/'.format(**{'user_id': user_id})
         return self._call_api(endpoint)
@@ -84,8 +101,12 @@ class UsersEndpointsMixin(object):
         query_params.update(kwargs)
         res = self._call_api('users/search/', query=query_params)
         if self.auto_patch:
-            [ClientCompatPatch.list_user(u, drop_incompat_keys=self.drop_incompat_keys)
-             for u in res.get('users', [])]
+            [
+                ClientCompatPatch.list_user(
+                    u, drop_incompat_keys=self.drop_incompat_keys
+                )
+                for u in res.get('users', [])
+            ]
         return res
 
     def check_username(self, username):
@@ -120,14 +141,21 @@ class UsersEndpointsMixin(object):
         """
         res = self._call_api('users/reel_settings/')
         if self.auto_patch and res.get('blocked_reels', {}).get('users'):
-            [ClientCompatPatch.list_user(u, drop_incompat_keys=self.drop_incompat_keys)
-             for u in res.get('blocked_reels', {}).get('users', [])]
+            [
+                ClientCompatPatch.list_user(
+                    u, drop_incompat_keys=self.drop_incompat_keys
+                )
+                for u in res.get('blocked_reels', {}).get('users', [])
+            ]
         return res
 
     def set_reel_settings(
-            self, message_prefs,
-            allow_story_reshare=None, reel_auto_archive=None,
-            save_to_camera_roll=None):
+        self,
+        message_prefs,
+        allow_story_reshare=None,
+        reel_auto_archive=None,
+        save_to_camera_roll=None,
+    ):
         """
         Set story message replies settings
 
@@ -150,7 +178,9 @@ class UsersEndpointsMixin(object):
             params['allow_story_reshare'] = '1' if allow_story_reshare else '0'
         if reel_auto_archive is not None:
             if reel_auto_archive not in ['on', 'off']:
-                raise ValueError('Invalid auto_archive: {0!s}'.format(reel_auto_archive))
+                raise ValueError(
+                    'Invalid auto_archive: {0!s}'.format(reel_auto_archive)
+                )
             params['reel_auto_archive'] = reel_auto_archive
         if save_to_camera_roll is not None:
             params['save_to_camera_roll'] = '1' if save_to_camera_roll else '0'

@@ -1,8 +1,6 @@
 import unittest
 
-from .common import (
-    ApiTestBase, compat_mock
-)
+from .common import ApiTestBase, compat_mock
 
 
 class FriendshipTests(ApiTestBase):
@@ -13,95 +11,107 @@ class FriendshipTests(ApiTestBase):
         return [
             {
                 'name': 'test_autocomplete_user_list',
-                'test': FriendshipTests('test_autocomplete_user_list', api)
+                'test': FriendshipTests('test_autocomplete_user_list', api),
             },
             {
                 'name': 'test_autocomplete_user_list_mock',
-                'test': FriendshipTests('test_autocomplete_user_list_mock', api)
+                'test': FriendshipTests('test_autocomplete_user_list_mock', api),
             },
             {
                 'name': 'test_user_following',
-                'test': FriendshipTests('test_user_following', api, user_id='124317')
+                'test': FriendshipTests('test_user_following', api, user_id='124317'),
             },
             {
                 'name': 'test_user_followers',
-                'test': FriendshipTests('test_user_followers', api, user_id='124317')
+                'test': FriendshipTests('test_user_followers', api, user_id='124317'),
             },
             {
                 'name': 'test_friendships_show',
-                'test': FriendshipTests('test_friendships_show', api, user_id='329452045')
+                'test': FriendshipTests(
+                    'test_friendships_show', api, user_id='329452045'
+                ),
             },
             {
                 'name': 'test_friendships_show_many',
-                'test': FriendshipTests('test_friendships_show_many', api, user_id='329452045')
+                'test': FriendshipTests(
+                    'test_friendships_show_many', api, user_id='329452045'
+                ),
             },
             {
                 'name': 'test_friendships_show_many2',
-                'test': FriendshipTests('test_friendships_show_many', api, user_id=['329452045', '124317'])
+                'test': FriendshipTests(
+                    'test_friendships_show_many', api, user_id=['329452045', '124317']
+                ),
             },
             {
                 'name': 'test_friendships_pending',
-                'test': FriendshipTests('test_friendships_pending', api)
+                'test': FriendshipTests('test_friendships_pending', api),
             },
             {
                 'name': 'test_friendships_create',
-                'test': FriendshipTests('test_friendships_create', api)
+                'test': FriendshipTests('test_friendships_create', api),
             },
             {
                 'name': 'test_friendships_create_mock',
-                'test': FriendshipTests('test_friendships_create_mock', api)
+                'test': FriendshipTests('test_friendships_create_mock', api),
             },
             {
                 'name': 'test_friendships_destroy',
-                'test': FriendshipTests('test_friendships_destroy', api)
+                'test': FriendshipTests('test_friendships_destroy', api),
             },
             {
                 'name': 'test_friendships_destroy_mock',
-                'test': FriendshipTests('test_friendships_destroy_mock', api)
+                'test': FriendshipTests('test_friendships_destroy_mock', api),
             },
             {
                 'name': 'test_friendships_block',
-                'test': FriendshipTests('test_friendships_block', api, user_id='2958144170')
+                'test': FriendshipTests(
+                    'test_friendships_block', api, user_id='2958144170'
+                ),
             },
             {
                 'name': 'test_friendships_block_mock',
-                'test': FriendshipTests('test_friendships_block_mock', api, user_id='2958144170')
+                'test': FriendshipTests(
+                    'test_friendships_block_mock', api, user_id='2958144170'
+                ),
             },
             {
                 'name': 'test_friendships_unblock_mock',
-                'test': FriendshipTests('test_friendships_unblock_mock', api, user_id='2958144170')
+                'test': FriendshipTests(
+                    'test_friendships_unblock_mock', api, user_id='2958144170'
+                ),
             },
             {
                 'name': 'test_blocked_reels',
-                'test': FriendshipTests('test_blocked_reels', api)
+                'test': FriendshipTests('test_blocked_reels', api),
             },
             {
                 'name': 'test_block_friend_reel_mock',
-                'test': FriendshipTests('test_block_friend_reel_mock', api)
+                'test': FriendshipTests('test_block_friend_reel_mock', api),
             },
             {
                 'name': 'test_unblock_friend_reel_mock',
-                'test': FriendshipTests('test_unblock_friend_reel_mock', api)
+                'test': FriendshipTests('test_unblock_friend_reel_mock', api),
             },
             {
                 'name': 'test_set_reel_block_status_mock',
-                'test': FriendshipTests('test_set_reel_block_status_mock', api)
+                'test': FriendshipTests('test_set_reel_block_status_mock', api),
             },
             {
                 'name': 'test_enable_post_notifications_mock',
-                'test': FriendshipTests('test_enable_post_notifications_mock', api)
+                'test': FriendshipTests('test_enable_post_notifications_mock', api),
             },
             {
                 'name': 'test_disable_post_notifications_mock',
-                'test': FriendshipTests('test_disable_post_notifications_mock', api)
+                'test': FriendshipTests('test_disable_post_notifications_mock', api),
             },
             {
                 'name': 'test_ignore_user_mock',
-                'test': FriendshipTests('test_ignore_user_mock', api)
+                'test': FriendshipTests('test_ignore_user_mock', api),
             },
             {
                 'name': 'test_remove_follower_mock',
-                'test': FriendshipTests('test_remove_follower_mock', api)
+                'test': FriendshipTests('test_remove_follower_mock', api),
             },
         ]
 
@@ -114,13 +124,17 @@ class FriendshipTests(ApiTestBase):
     @compat_mock.patch('instapi.Client._call_api')
     def test_autocomplete_user_list_mock(self, call_api):
         call_api.return_value = {
-            'status': 'ok', 'users': [
+            'status': 'ok',
+            'users': [
                 {'pk': 100, 'profile_pic_url': ''},
                 {'pk': 200, 'profile_pic_url': ''},
-            ]}
+            ],
+        }
         self.api.autocomplete_user_list()
-        call_api.assert_called_with('friendships/autocomplete_user_list/',
-                                    query={'followinfo': 'True', 'version': '2'})
+        call_api.assert_called_with(
+            'friendships/autocomplete_user_list/',
+            query={'followinfo': 'True', 'version': '2'},
+        )
 
     def test_user_following(self):
         rank_token = self.api.generate_uuid()
@@ -147,7 +161,9 @@ class FriendshipTests(ApiTestBase):
     def test_friendships_show_many(self):
         results = self.api.friendships_show_many(self.test_user_id)
         self.assertEqual(results.get('status'), 'ok')
-        self.assertGreater(len(results.get('friendship_statuses', [])), 0, 'No statuses returned.')
+        self.assertGreater(
+            len(results.get('friendship_statuses', [])), 0, 'No statuses returned.'
+        )
 
     @unittest.skip('Modifies data.')
     def test_friendships_create(self):
@@ -159,14 +175,16 @@ class FriendshipTests(ApiTestBase):
     def test_friendships_create_mock(self, call_api):
         call_api.return_value = {
             'status': 'ok',
-            'friendship_status': {'following': True}}
+            'friendship_status': {'following': True},
+        }
         user_id = '2958144170'
         params = {'user_id': user_id, 'radio_type': self.api.radio_type}
         params.update(self.api.authenticated_params)
         self.api.friendships_create(user_id)
         call_api.assert_called_with(
             'friendships/create/{user_id!s}/'.format(**{'user_id': user_id}),
-            params=params)
+            params=params,
+        )
 
     @unittest.skip('Modifies data.')
     def test_friendships_destroy(self):
@@ -183,7 +201,8 @@ class FriendshipTests(ApiTestBase):
         self.api.friendships_destroy(user_id)
         call_api.assert_called_with(
             'friendships/destroy/{user_id!s}/'.format(**{'user_id': user_id}),
-            params=params)
+            params=params,
+        )
 
     @unittest.skip('Modifies data.')
     def test_friendships_block(self):
@@ -200,7 +219,8 @@ class FriendshipTests(ApiTestBase):
         self.api.friendships_block(user_id)
         call_api.assert_called_with(
             'friendships/block/{user_id!s}/'.format(**{'user_id': user_id}),
-            params=params)
+            params=params,
+        )
 
     @compat_mock.patch('instapi.Client._call_api')
     def test_friendships_unblock_mock(self, call_api):
@@ -211,7 +231,8 @@ class FriendshipTests(ApiTestBase):
         self.api.friendships_unblock(user_id)
         call_api.assert_called_with(
             'friendships/unblock/{user_id!s}/'.format(**{'user_id': user_id}),
-            params=params)
+            params=params,
+        )
 
     def test_blocked_reels(self):
         results = self.api.blocked_reels()
@@ -227,7 +248,8 @@ class FriendshipTests(ApiTestBase):
         self.api.block_friend_reel(user_id)
         call_api.assert_called_with(
             'friendships/block_friend_reel/{user_id!s}/'.format(**{'user_id': user_id}),
-            params=params)
+            params=params,
+        )
 
     @compat_mock.patch('instapi.Client._call_api')
     def test_unblock_friend_reel_mock(self, call_api):
@@ -235,20 +257,20 @@ class FriendshipTests(ApiTestBase):
         user_id = '2958144170'
         self.api.unblock_friend_reel(user_id)
         call_api.assert_called_with(
-            'friendships/unblock_friend_reel/{user_id!s}/'.format(**{'user_id': user_id}),
-            params=self.api.authenticated_params)
+            'friendships/unblock_friend_reel/{user_id!s}/'.format(
+                **{'user_id': user_id}
+            ),
+            params=self.api.authenticated_params,
+        )
 
     @compat_mock.patch('instapi.Client._call_api')
     def test_set_reel_block_status_mock(self, call_api):
         call_api.return_value = {'status': 'ok'}
         user_id = '2958144170'
         self.api.set_reel_block_status(user_id, block_status='unblock')
-        params = {
-            'source': 'settings',
-            'user_block_statuses': {user_id: 'unblock'}}
+        params = {'source': 'settings', 'user_block_statuses': {user_id: 'unblock'}}
         params.update(self.api.authenticated_params)
-        call_api.assert_called_with(
-            'friendships/set_reel_block_status/', params=params)
+        call_api.assert_called_with('friendships/set_reel_block_status/', params=params)
 
     @compat_mock.patch('instapi.Client._call_api')
     def test_enable_post_notifications_mock(self, call_api):
@@ -257,7 +279,8 @@ class FriendshipTests(ApiTestBase):
         self.api.enable_post_notifications(user_id)
         call_api.assert_called_with(
             'friendships/favorite/{user_id!s}/'.format(**{'user_id': user_id}),
-            params=self.api.authenticated_params)
+            params=self.api.authenticated_params,
+        )
 
     @compat_mock.patch('instapi.Client._call_api')
     def test_disable_post_notifications_mock(self, call_api):
@@ -266,7 +289,8 @@ class FriendshipTests(ApiTestBase):
         self.api.disable_post_notifications(user_id)
         call_api.assert_called_with(
             'friendships/unfavorite/{user_id!s}/'.format(**{'user_id': user_id}),
-            params=self.api.authenticated_params)
+            params=self.api.authenticated_params,
+        )
 
     @compat_mock.patch('instapi.Client._call_api')
     def test_ignore_user_mock(self, call_api):
@@ -277,7 +301,8 @@ class FriendshipTests(ApiTestBase):
         params.update(self.api.authenticated_params)
         call_api.assert_called_with(
             'friendships/ignore/{user_id!s}/'.format(**{'user_id': user_id}),
-            params=params)
+            params=params,
+        )
 
     @compat_mock.patch('instapi.Client._call_api')
     def test_remove_follower_mock(self, call_api):
@@ -288,4 +313,5 @@ class FriendshipTests(ApiTestBase):
         params.update(self.api.authenticated_params)
         call_api.assert_called_with(
             'friendships/remove_follower/{user_id!s}/'.format(**{'user_id': user_id}),
-            params=params)
+            params=params,
+        )
