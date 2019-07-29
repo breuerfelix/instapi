@@ -2,10 +2,10 @@
 
 A Python wrapper for the Instagram private API with no 3rd party dependencies. Supports both the app and web APIs.
 
-![3](https://img.shields.io/badge/Python-3.svg)
-[![release](https://img.shields.io/github/release/breuerfelix/instapi.svg?colorB=ff7043)](https://github.com/breuerfelix/instapi/releases)
-[![docs](https://img.shields.io/badge/docs-readthedocs.io-ff4980.svg?maxAge=2592000)](https://instapi.readthedocs.io/en/latest/)
-[![build](https://img.shields.io/travis/breuerfelix/instapi.svg)](https://travis-ci.org/breuerfelix/instapi)
+[![3](https://img.shields.io/badge/Python-3.svg)]
+[![release](https://img.shields.io/github/release/breuerfelix/instapi.svg?colorB=ff7043)](https://github.com/breuerfelix/instapi/releases)]
+[![docs](https://img.shields.io/badge/docs-readthedocs.io-ff4980.svg?maxAge=2592000)](https://instapi.readthedocs.io/en/latest/)]
+[![build](https://img.shields.io/travis/breuerfelix/instapi.svg)](https://travis-ci.org/breuerfelix/instapi)]
 
 ## Overview
 
