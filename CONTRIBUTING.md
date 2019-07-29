@@ -14,7 +14,7 @@ Here are a few simple guidelines to follow if you wish to submit a pull request:
 - New endpoints should be accompanied by a **relevant test case**.
 - Backward compatibility should not be broken without very good reason.
 - I try to maintain a **small dependency footprint**. If you intend to add a new dependency, make sure that there is a strong case for it.
-- Run ``flake8 --max-line-length=120`` on your changes before pushing.
+- Run ``black -t py33 -S .`` on your changes before pushing.
 - Make sure docs are buildable by running ``make html`` in the ``docs/`` folder (after you've installed the dev requirements).
 - **Please do not take a rejection of a PR personally**. I appreciate your contribution but I reserve the right to be the final arbiter for any changes. You're free to fork my work and tailor it for your needs, it's fine!
 

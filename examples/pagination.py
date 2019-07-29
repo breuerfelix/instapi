@@ -2,7 +2,7 @@ import json
 import os.path
 import logging
 import argparse
-from instapi import (Client, __version__ as client_version)
+from instapi import Client, __version__ as client_version
 
 
 if __name__ == '__main__':
@@ -34,7 +34,7 @@ if __name__ == '__main__':
     while next_max_id:
         results = api.user_followers(user_id, max_id=next_max_id)
         followers.extend(results.get('users', []))
-        if len(followers) >= 600:       # get only first 600 or so
+        if len(followers) >= 600:  # get only first 600 or so
             break
         next_max_id = results.get('next_max_id')
 
@@ -48,7 +48,8 @@ if __name__ == '__main__':
     tag_results = []
     while has_more and rank_token and len(tag_results) < 60:
         results = api.tag_search(
-            'cats', rank_token, exclude_list=[t['id'] for t in tag_results])
+            'cats', rank_token, exclude_list=[t['id'] for t in tag_results]
+        )
         tag_results.extend(results.get('results', []))
         has_more = results.get('has_more')
         rank_token = results.get('rank_token')

@@ -1,8 +1,6 @@
 import unittest
 
-from .common import (
-    ApiTestBase, compat_mock, gen_user_breadcrumb
-)
+from .common import ApiTestBase, compat_mock, gen_user_breadcrumb
 
 
 class LiveTests(ApiTestBase):
@@ -13,56 +11,56 @@ class LiveTests(ApiTestBase):
         return [
             {
                 'name': 'test_suggested_broadcasts',
-                'test': LiveTests('test_suggested_broadcasts', api)
+                'test': LiveTests('test_suggested_broadcasts', api),
             },
             {
                 'name': 'test_user_broadcast',
-                'test': LiveTests('test_user_broadcast', api)
+                'test': LiveTests('test_user_broadcast', api),
             },
             {
                 'name': 'test_broadcast_info',
-                'test': LiveTests('test_broadcast_info', api)
+                'test': LiveTests('test_broadcast_info', api),
             },
             {
                 'name': 'test_broadcast_comments',
-                'test': LiveTests('test_broadcast_comments', api)
+                'test': LiveTests('test_broadcast_comments', api),
             },
             {
                 'name': 'test_broadcast_heartbeat_and_viewercount',
-                'test': LiveTests('test_broadcast_heartbeat_and_viewercount', api)
+                'test': LiveTests('test_broadcast_heartbeat_and_viewercount', api),
             },
             {
                 'name': 'test_broadcast_like_count',
-                'test': LiveTests('test_broadcast_like_count', api)
+                'test': LiveTests('test_broadcast_like_count', api),
             },
             {
                 'name': 'test_broadcast_like',
-                'test': LiveTests('test_broadcast_like', api)
+                'test': LiveTests('test_broadcast_like', api),
             },
             {
                 'name': 'test_broadcast_like_mock',
-                'test': LiveTests('test_broadcast_like_mock', api)
+                'test': LiveTests('test_broadcast_like_mock', api),
             },
             {
                 'name': 'test_broadcast_comment',
-                'test': LiveTests('test_broadcast_comment', api)
+                'test': LiveTests('test_broadcast_comment', api),
             },
             {
                 'name': 'test_broadcast_comment_mock',
-                'test': LiveTests('test_broadcast_comment_mock', api)
+                'test': LiveTests('test_broadcast_comment_mock', api),
             },
             {
                 'name': 'test_replay_broadcast_comments_mock',
-                'test': LiveTests('test_replay_broadcast_comments_mock', api)
+                'test': LiveTests('test_replay_broadcast_comments_mock', api),
             },
             {
                 'name': 'test_replay_broadcast_likes_mock',
-                'test': LiveTests('test_replay_broadcast_likes_mock', api)
+                'test': LiveTests('test_replay_broadcast_likes_mock', api),
             },
         ]
 
     def test_user_broadcast(self):
-        broadcast = self.api.user_broadcast('25025320')     # Instagram
+        broadcast = self.api.user_broadcast('25025320')  # Instagram
         self.assertIsNone(broadcast)
 
     @unittest.skip('Modifies data.')
@@ -88,7 +86,8 @@ class LiveTests(ApiTestBase):
         self.api.broadcast_like(broadcast_id, like_count)
         call_api.assert_called_with(
             'live/{broadcast_id!s}/like/'.format(**{'broadcast_id': broadcast_id}),
-            params=params)
+            params=params,
+        )
 
     def test_broadcast_like_count(self):
         top_live_results = self.api.discover_top_live()
@@ -110,7 +109,9 @@ class LiveTests(ApiTestBase):
             broadcast_id = b['id']
             results = self.api.broadcast_comments(broadcast_id)
             self.assertEqual(results.get('status'), 'ok')
-            self.assertGreater(len(results.get('comments', [])), 0, 'No comments returned.')
+            self.assertGreater(
+                len(results.get('comments', [])), 0, 'No comments returned.'
+            )
             break
 
     def test_broadcast_heartbeat_and_viewercount(self):
@@ -145,10 +146,11 @@ class LiveTests(ApiTestBase):
         comment_text = '<3'
         breadcrumb = gen_user_breadcrumb(len(comment_text))
         generated_uuid = self.api.generate_uuid()
-        with compat_mock.patch('instapi.endpoints.live.gen_user_breadcrumb') \
-                as gen_user_breadcrumb_mock, \
-                compat_mock.patch('instapi.Client.generate_uuid') \
-                as generate_uuid_mock:
+        with compat_mock.patch(
+            'instapi.endpoints.live.gen_user_breadcrumb'
+        ) as gen_user_breadcrumb_mock, compat_mock.patch(
+            'instapi.Client.generate_uuid'
+        ) as generate_uuid_mock:
             gen_user_breadcrumb_mock.return_value = breadcrumb
             generate_uuid_mock.return_value = generated_uuid
             params = {
@@ -161,8 +163,11 @@ class LiveTests(ApiTestBase):
             params.update(self.api.authenticated_params)
             self.api.broadcast_comment(broadcast_id, comment_text)
             call_api.assert_called_with(
-                'live/{broadcast_id!s}/comment/'.format(**{'broadcast_id': broadcast_id}),
-                params=params)
+                'live/{broadcast_id!s}/comment/'.format(
+                    **{'broadcast_id': broadcast_id}
+                ),
+                params=params,
+            )
 
     def test_broadcast_info(self):
         top_live_results = self.api.discover_top_live()
@@ -181,28 +186,30 @@ class LiveTests(ApiTestBase):
     def test_suggested_broadcasts(self):
         results = self.api.suggested_broadcasts()
         self.assertEqual(results.get('status'), 'ok')
-        self.assertGreater(len(results.get('broadcasts', [])), 0, 'No broadcasts returned.')
+        self.assertGreater(
+            len(results.get('broadcasts', [])), 0, 'No broadcasts returned.'
+        )
 
     @compat_mock.patch('instapi.Client._call_api')
     def test_replay_broadcast_comments_mock(self, call_api):
         broadcast_id = 123
-        query = {
-            'starting_offset': 0,
-            'encoding_tag': 'instagram_dash_remuxed',
-        }
+        query = {'starting_offset': 0, 'encoding_tag': 'instagram_dash_remuxed'}
         self.api.replay_broadcast_comments(broadcast_id, **query)
         call_api.assert_called_with(
-            'live/{broadcast_id!s}/get_post_live_comments/'.format(**{'broadcast_id': broadcast_id}),
-            query=query)
+            'live/{broadcast_id!s}/get_post_live_comments/'.format(
+                **{'broadcast_id': broadcast_id}
+            ),
+            query=query,
+        )
 
     @compat_mock.patch('instapi.Client._call_api')
     def test_replay_broadcast_likes_mock(self, call_api):
         broadcast_id = 123
-        query = {
-            'starting_offset': 0,
-            'encoding_tag': 'instagram_dash_remuxed',
-        }
+        query = {'starting_offset': 0, 'encoding_tag': 'instagram_dash_remuxed'}
         self.api.replay_broadcast_likes(broadcast_id, **query)
         call_api.assert_called_with(
-            'live/{broadcast_id!s}/get_post_live_likes/'.format(**{'broadcast_id': broadcast_id}),
-            query=query)
+            'live/{broadcast_id!s}/get_post_live_likes/'.format(
+                **{'broadcast_id': broadcast_id}
+            ),
+            query=query,
+        )

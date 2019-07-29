@@ -1,4 +1,3 @@
-
 from .common import ApiTestBase
 
 
@@ -10,23 +9,23 @@ class LocationTests(ApiTestBase):
         return [
             {
                 'name': 'test_location_info',
-                'test': LocationTests('test_location_info', api)
+                'test': LocationTests('test_location_info', api),
             },
             {
                 'name': 'test_location_related',
-                'test': LocationTests('test_location_related', api)
+                'test': LocationTests('test_location_related', api),
             },
             {
                 'name': 'test_location_search',
-                'test': LocationTests('test_location_search', api)
+                'test': LocationTests('test_location_search', api),
             },
             {
                 'name': 'test_location_fb_search',
-                'test': LocationTests('test_location_fb_search', api)
+                'test': LocationTests('test_location_fb_search', api),
             },
             {
                 'name': 'test_location_section',
-                'test': LocationTests('test_location_section', api)
+                'test': LocationTests('test_location_section', api),
             },
         ]
 

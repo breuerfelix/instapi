@@ -2,13 +2,21 @@ from io import BytesIO
 import json
 
 from .common import (
-    ApiTestBase, Client, ClientThrottledError,
-    ClientError, ClientLoginRequiredError,
-    ClientSentryBlockError, ClientCheckpointRequiredError,
-    ClientChallengeRequiredError, Constants,
-    gen_user_breadcrumb, max_chunk_size_generator, max_chunk_count_generator,
-    compat_mock, compat_urllib_error,
-    MockResponse
+    ApiTestBase,
+    Client,
+    ClientThrottledError,
+    ClientError,
+    ClientLoginRequiredError,
+    ClientSentryBlockError,
+    ClientCheckpointRequiredError,
+    ClientChallengeRequiredError,
+    Constants,
+    gen_user_breadcrumb,
+    max_chunk_size_generator,
+    max_chunk_count_generator,
+    compat_mock,
+    compat_urllib_error,
+    MockResponse,
 )
 
 
@@ -20,51 +28,45 @@ class ClientTests(ApiTestBase):
         return [
             {
                 'name': 'test_validate_useragent',
-                'test': ClientTests('test_validate_useragent', api)
+                'test': ClientTests('test_validate_useragent', api),
             },
             {
                 'name': 'test_validate_useragent2',
-                'test': ClientTests('test_validate_useragent2', api)
+                'test': ClientTests('test_validate_useragent2', api),
             },
             {
                 'name': 'test_generate_useragent',
-                'test': ClientTests('test_generate_useragent', api)
+                'test': ClientTests('test_generate_useragent', api),
             },
             {
                 'name': 'test_cookiejar_dump',
-                'test': ClientTests('test_cookiejar_dump', api)
+                'test': ClientTests('test_cookiejar_dump', api),
             },
             {
                 'name': 'test_gen_user_breadcrumb',
-                'test': ClientTests('test_gen_user_breadcrumb', api)
+                'test': ClientTests('test_gen_user_breadcrumb', api),
             },
             {
                 'name': 'test_max_chunk_size_generator',
-                'test': ClientTests('test_max_chunk_size_generator', api)
+                'test': ClientTests('test_max_chunk_size_generator', api),
             },
             {
                 'name': 'test_max_chunk_count_generator',
-                'test': ClientTests('test_max_chunk_count_generator', api)
+                'test': ClientTests('test_max_chunk_count_generator', api),
             },
-            {
-                'name': 'test_settings',
-                'test': ClientTests('test_settings', api)
-            },
-            {
-                'name': 'test_user_agent',
-                'test': ClientTests('test_user_agent', api)
-            },
+            {'name': 'test_settings', 'test': ClientTests('test_settings', api)},
+            {'name': 'test_user_agent', 'test': ClientTests('test_user_agent', api)},
             {
                 'name': 'test_client_properties',
-                'test': ClientTests('test_client_properties', api)
+                'test': ClientTests('test_client_properties', api),
             },
             {
                 'name': 'test_client_loginrequired',
-                'test': ClientTests('test_client_loginrequired', api)
+                'test': ClientTests('test_client_loginrequired', api),
             },
             {
                 'name': 'test_client_requests',
-                'test': ClientTests('test_client_requests', api)
+                'test': ClientTests('test_client_requests', api),
             },
         ]
 
@@ -99,7 +101,7 @@ class ClientTests(ApiTestBase):
             'android_version': 18,
             'dpi': '320dpi',
             'resolution': '720x1280',
-            'chipset': 'qcom'
+            'chipset': 'qcom',
         }
         custom_ua = Client.generate_useragent(
             android_release=custom_device['android_release'],
@@ -109,7 +111,7 @@ class ClientTests(ApiTestBase):
             phone_model=custom_device['model'],
             phone_dpi=custom_device['dpi'],
             phone_resolution=custom_device['resolution'],
-            phone_chipset=custom_device['chipset']
+            phone_chipset=custom_device['chipset'],
         )
         self.assertEqual(
             custom_ua,
@@ -126,7 +128,7 @@ class ClientTests(ApiTestBase):
                 custom_device['model'],
                 custom_device['chipset'],
                 Constants.VERSION_CODE,
-            )
+            ),
         )
 
     def test_cookiejar_dump(self):
@@ -156,7 +158,9 @@ class ClientTests(ApiTestBase):
         chunk_data = 'abcdefghijklmnopqrstuvwxyz'
         expected_chunk_count = 5
         chunk_count = 0
-        for chunk_info, data in max_chunk_count_generator(expected_chunk_count, chunk_data):
+        for chunk_info, data in max_chunk_count_generator(
+            expected_chunk_count, chunk_data
+        ):
             chunk_count += 1
             self.assertIsNotNone(data, 'Empty chunk.')
             self.assertEqual(len(data), chunk_info.length, 'Chunk length is wrong.')
@@ -179,6 +183,7 @@ class ClientTests(ApiTestBase):
 
         def test_ua_setter():
             self.api.user_agent = 'Agent X'
+
         self.assertRaises(ValueError, test_ua_setter)
 
         custom_ua = self.api.generate_useragent(phone_manufacturer='BrandX')
@@ -212,50 +217,88 @@ class ClientTests(ApiTestBase):
         self.sleep_interval = 0
         open_mock.side_effect = [
             compat_urllib_error.HTTPError(
-                '', 400, 'Bad Request', {},
-                BytesIO(json.dumps({'status': 'fail', 'message': 'login_required'}).encode('ascii'))),
-
-            compat_urllib_error.HTTPError(
-                '', 429, 'Too Many Requests', {},
+                '',
+                400,
+                'Bad Request',
+                {},
                 BytesIO(
-                    json.dumps({
-                        'status': 'fail',
-                        'message': 'Sorry, too many requests. Please try again later.'}
+                    json.dumps({'status': 'fail', 'message': 'login_required'}).encode(
+                        'ascii'
+                    )
+                ),
+            ),
+            compat_urllib_error.HTTPError(
+                '',
+                429,
+                'Too Many Requests',
+                {},
+                BytesIO(
+                    json.dumps(
+                        {
+                            'status': 'fail',
+                            'message': 'Sorry, too many requests. Please try again later.',
+                        }
                     ).encode('ascii')
-                )),
-
+                ),
+            ),
             compat_urllib_error.HTTPError(
-                '', 500, 'Internal Server Error', {},
-                BytesIO('Internal Server Error'.encode('ascii'))),
-
+                '',
+                500,
+                'Internal Server Error',
+                {},
+                BytesIO('Internal Server Error'.encode('ascii')),
+            ),
             compat_urllib_error.HTTPError(
-                '', 400, 'Bad Request', {},
-                BytesIO(json.dumps(
-                    {
-                        'status': 'fail',
-                        'message': 'Sorry, there was a problem with your request.',
-                        'error_type': 'sentry_block'
-                    }).encode('ascii'))),
-
+                '',
+                400,
+                'Bad Request',
+                {},
+                BytesIO(
+                    json.dumps(
+                        {
+                            'status': 'fail',
+                            'message': 'Sorry, there was a problem with your request.',
+                            'error_type': 'sentry_block',
+                        }
+                    ).encode('ascii')
+                ),
+            ),
             compat_urllib_error.HTTPError(
-                '', 400, 'Bad Request', {},
-                BytesIO(json.dumps(
-                    {
-                        'status': 'fail',
-                        'message': 'challenge_required',
-                        'error_type': 'checkpoint_challenge_required',
-                        'challenge': {'url': 'https://i.instagram.com/challenge/x/y/'}
-                    }).encode('ascii'))),
-
+                '',
+                400,
+                'Bad Request',
+                {},
+                BytesIO(
+                    json.dumps(
+                        {
+                            'status': 'fail',
+                            'message': 'challenge_required',
+                            'error_type': 'checkpoint_challenge_required',
+                            'challenge': {
+                                'url': 'https://i.instagram.com/challenge/x/y/'
+                            },
+                        }
+                    ).encode('ascii')
+                ),
+            ),
             compat_urllib_error.HTTPError(
-                '', 400, 'Bad Request', {},
-                BytesIO(json.dumps(
-                    {
-                        'status': 'fail',
-                        'message': 'challenge_required',
-                        'error_type': 'challenge_required',
-                        'challenge': {'url': 'https://i.instagram.com/challenge/x/y/'}
-                    }).encode('ascii'))),
+                '',
+                400,
+                'Bad Request',
+                {},
+                BytesIO(
+                    json.dumps(
+                        {
+                            'status': 'fail',
+                            'message': 'challenge_required',
+                            'error_type': 'challenge_required',
+                            'challenge': {
+                                'url': 'https://i.instagram.com/challenge/x/y/'
+                            },
+                        }
+                    ).encode('ascii')
+                ),
+            ),
             MockResponse(body=json.dumps({'message': 'login_required'})),
             MockResponse(body=json.dumps({'status': 'error'})),
         ]
@@ -266,7 +309,9 @@ class ClientTests(ApiTestBase):
 
         with self.assertRaises(ClientThrottledError) as ce:
             self.api.feed_timeline()
-        self.assertEqual(ce.exception.msg, 'Sorry, too many requests. Please try again later.')
+        self.assertEqual(
+            ce.exception.msg, 'Sorry, too many requests. Please try again later.'
+        )
 
         with self.assertRaises(ClientError) as ce:
             self.api.feed_timeline()

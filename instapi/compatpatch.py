@@ -6,6 +6,7 @@ class ClientCompatPatch(object):
     from the public one by adding the necessary properties, and if required,
     remove any incompatible properties (to save storage space for example).
     """
+
     FILTERS = {
         -2: 'OES',
         -1: 'YUV',
@@ -69,11 +70,19 @@ class ClientCompatPatch(object):
         for media in medias:
             if not current:
                 current = media
-            if (abs(media['width'] - width) < abs(current['width'] - width) or
-                    (media['width'] == current['width'] and not height and
-                     not media['height'] == current['width']) or
-                    (media['width'] == current['width'] and height and
-                     abs(media['height'] - height) < abs(current['height'] - height))):
+            if (
+                abs(media['width'] - width) < abs(current['width'] - width)
+                or (
+                    media['width'] == current['width']
+                    and not height
+                    and not media['height'] == current['width']
+                )
+                or (
+                    media['width'] == current['width']
+                    and height
+                    and abs(media['height'] - height) < abs(current['height'] - height)
+                )
+            ):
                 current = media
 
         return current
@@ -116,7 +125,7 @@ class ClientCompatPatch(object):
                     'type',
                     'user',
                     'user_id',
-                ]
+                ],
             )
         return comment
 
@@ -124,7 +133,9 @@ class ClientCompatPatch(object):
     def media(cls, media, drop_incompat_keys=False):
         """Patch a media object"""
         media['link'] = 'https://www.instagram.com/p/{0!s}/'.format(media['code'])
-        media['created_time'] = str(int(media.get('taken_at') or media.get('device_timestamp')))
+        media['created_time'] = str(
+            int(media.get('taken_at') or media.get('device_timestamp'))
+        )
 
         if media['media_type'] == MediaTypes.PHOTO:
             media['type'] = 'image'
@@ -157,22 +168,29 @@ class ClientCompatPatch(object):
                         'status',
                         'type',
                         'user',
-                    ]
+                    ],
                 )
-        media['user'] = cls.list_user(media['user'], drop_incompat_keys=drop_incompat_keys)
-        if media['media_type'] == MediaTypes.CAROUSEL and media.get('carousel_media', []):
+        media['user'] = cls.list_user(
+            media['user'], drop_incompat_keys=drop_incompat_keys
+        )
+        if media['media_type'] == MediaTypes.CAROUSEL and media.get(
+            'carousel_media', []
+        ):
             # patch carousel media
             for carousel_media in media.get('carousel_media', []):
                 if carousel_media['media_type'] == MediaTypes.PHOTO:
                     carousel_media['type'] = 'image'
                 elif carousel_media['media_type'] == MediaTypes.VIDEO:
                     carousel_media['type'] = 'video'
-                image_versions2 = carousel_media.get('image_versions2', {}).get('candidates', [])
+                image_versions2 = carousel_media.get('image_versions2', {}).get(
+                    'candidates', []
+                )
                 images = {
                     'low_resolution': cls._get_closest_size(image_versions2, 320),
                     'thumbnail': cls._get_closest_size(image_versions2, 150, 150),
                     'standard_resolution': cls._get_closest_size(
-                        image_versions2, carousel_media.get('original_width', 1000)),
+                        image_versions2, carousel_media.get('original_width', 1000)
+                    ),
                 }
                 carousel_media['images'] = images
                 if carousel_media['media_type'] == MediaTypes.VIDEO:
@@ -180,7 +198,8 @@ class ClientCompatPatch(object):
                     videos = {
                         'low_bandwidth': cls._get_closest_size(video_versions, 480),
                         'standard_resolution': cls._get_closest_size(
-                            video_versions, carousel_media.get('original_width', 640)),
+                            video_versions, carousel_media.get('original_width', 640)
+                        ),
                         'low_resolution': cls._get_closest_size(video_versions, 640),
                     }
                     if drop_incompat_keys:
@@ -197,19 +216,24 @@ class ClientCompatPatch(object):
                         user['id'] = str(ut['user']['pk'])
                         user['profile_picture'] = ut['user']['profile_pic_url']
                         if drop_incompat_keys:
-                            cls._drop_keys(user, ['profile_pic_url', 'pk', 'is_private'])
+                            cls._drop_keys(
+                                user, ['profile_pic_url', 'pk', 'is_private']
+                            )
 
-                        user_tags.append({
-                            'position': pos,
-                            'user': user,
-                        })
+                        user_tags.append({'position': pos, 'user': user})
                     carousel_media['users_in_photo'] = user_tags
                 # patch location
-                if 'location' not in carousel_media or not carousel_media['location'].get('lat'):
+                if 'location' not in carousel_media or not carousel_media[
+                    'location'
+                ].get('lat'):
                     carousel_media['location'] = None
                 else:
-                    carousel_media['location']['latitude'] = carousel_media['location']['lat']
-                    carousel_media['location']['longitude'] = carousel_media['location']['lng']
+                    carousel_media['location']['latitude'] = carousel_media['location'][
+                        'lat'
+                    ]
+                    carousel_media['location']['longitude'] = carousel_media[
+                        'location'
+                    ]['lng']
                     carousel_media['location']['id'] = carousel_media['location']['pk']
 
             first_carousel_media = media['carousel_media'][0]
@@ -222,7 +246,9 @@ class ClientCompatPatch(object):
             images = {
                 'low_resolution': cls._get_closest_size(image_versions2, 320),
                 'thumbnail': cls._get_closest_size(image_versions2, 150, 150),
-                'standard_resolution': cls._get_closest_size(image_versions2, media.get('original_width', 1000)),
+                'standard_resolution': cls._get_closest_size(
+                    image_versions2, media.get('original_width', 1000)
+                ),
             }
             media['images'] = images
 
@@ -230,17 +256,16 @@ class ClientCompatPatch(object):
             video_versions = media.get('video_versions', [])
             videos = {
                 'low_bandwidth': cls._get_closest_size(video_versions, 480),
-                'standard_resolution': cls._get_closest_size(video_versions, media.get('original_width', 640)),
+                'standard_resolution': cls._get_closest_size(
+                    video_versions, media.get('original_width', 640)
+                ),
                 'low_resolution': cls._get_closest_size(video_versions, 640),
             }
             if drop_incompat_keys:
                 [cls._drop_keys(i, ['type']) for i in list(videos.values())]
             media['videos'] = videos
 
-        likes = {
-            'count': media.get('like_count', 0),
-            'data': []
-        }
+        likes = {'count': media.get('like_count', 0), 'data': []}
         media['likes'] = likes
         comments = {
             'count': media.get('comment_count', 0),
@@ -248,7 +273,7 @@ class ClientCompatPatch(object):
             'data': [
                 cls.comment(c, drop_incompat_keys=drop_incompat_keys)
                 for c in media.get('comments', [])
-            ]
+            ],
         }
         media['comments'] = comments
         if media.get('preview_comments'):
@@ -258,7 +283,10 @@ class ClientCompatPatch(object):
             ]
 
         media['attribution'] = None
-        if media.get('filter_type') is not None and media.get('filter_type') in cls.FILTERS:
+        if (
+            media.get('filter_type') is not None
+            and media.get('filter_type') in cls.FILTERS
+        ):
             media['filter'] = cls.FILTERS[media.get('filter_type')]
         else:
             media['filter'] = ''
@@ -267,20 +295,26 @@ class ClientCompatPatch(object):
         # Try to preserve location even if there's no lat/lng/pk
         if 'location' not in media or not media['location']:
             media['location'] = None
-        elif (media.get('location', {}).get('lat')
-              and media.get('location', {}).get('lng')
-              and media.get('location', {}).get('pk')):
+        elif (
+            media.get('location', {}).get('lat')
+            and media.get('location', {}).get('lng')
+            and media.get('location', {}).get('pk')
+        ):
             media['location']['latitude'] = media['location']['lat']
             media['location']['longitude'] = media['location']['lng']
             media['location']['id'] = media['location']['pk']
         # For stories
-        if (not media.get('location')
-                and media.get('story_locations')
-                and media.get('story_locations', [{}])[0].get('location')):
+        if (
+            not media.get('location')
+            and media.get('story_locations')
+            and media.get('story_locations', [{}])[0].get('location')
+        ):
             story_location = media['story_locations'][0]['location']
-            if (story_location.get('lat')
-                    and story_location.get('lng')
-                    and story_location.get('pk')):
+            if (
+                story_location.get('lat')
+                and story_location.get('lng')
+                and story_location.get('pk')
+            ):
                 media['location'] = story_location
 
         media['tags'] = []
@@ -295,10 +329,7 @@ class ClientCompatPatch(object):
                 if drop_incompat_keys:
                     cls._drop_keys(user, ['profile_pic_url', 'pk', 'is_private'])
 
-                user_tags.append({
-                    'position': pos,
-                    'user': user,
-                })
+                user_tags.append({'position': pos, 'user': user})
             media['users_in_photo'] = user_tags
         elif media.get('reel_mentions'):
             reel_mentions = media['reel_mentions']
@@ -309,11 +340,10 @@ class ClientCompatPatch(object):
                 user['id'] = str(rm['user']['pk'])
                 user['profile_picture'] = rm['user']['profile_pic_url']
                 if drop_incompat_keys:
-                    cls._drop_keys(user, ['profile_pic_id', 'profile_pic_url', 'pk', 'is_private'])
-                user_tags.append({
-                    'position': pos,
-                    'user': user,
-                })
+                    cls._drop_keys(
+                        user, ['profile_pic_id', 'profile_pic_url', 'pk', 'is_private']
+                    )
+                user_tags.append({'position': pos, 'user': user})
             media['users_in_photo'] = user_tags
         else:
             media['users_in_photo'] = []
@@ -356,7 +386,7 @@ class ClientCompatPatch(object):
                     'video_versions',
                     'view_count',
                     'visibility',
-                ]
+                ],
             )
             if media['location']:
                 cls._drop_keys(
@@ -372,7 +402,7 @@ class ClientCompatPatch(object):
                         'lng',
                         'pk',
                         'state',
-                    ]
+                    ],
                 )
         return media
 
@@ -383,11 +413,15 @@ class ClientCompatPatch(object):
         user['bio'] = user.get('biography', '')
         user['profile_picture'] = user['profile_pic_url']
         user['website'] = user.get('external_url', '')
-        if 'media_count' in user and 'follower_count' in user and 'following_count' in user:
+        if (
+            'media_count' in user
+            and 'follower_count' in user
+            and 'following_count' in user
+        ):
             counts = {
                 'media': user['media_count'],
                 'followed_by': user['follower_count'],
-                'follows': user['following_count']
+                'follows': user['following_count'],
             }
             user['counts'] = counts
         if drop_incompat_keys:
@@ -417,7 +451,7 @@ class ClientCompatPatch(object):
                     'profile_pic_id',
                     'profile_pic_url',
                     'usertags_count',
-                ]
+                ],
             )
         return user
 
@@ -447,6 +481,6 @@ class ClientCompatPatch(object):
                     'profile_pic_url',
                     'social_context',
                     'unseen_count',
-                ]
+                ],
             )
         return user

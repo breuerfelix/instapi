@@ -19,6 +19,11 @@ from .client import ClientTests
 from .compatpatch import CompatPatchTests
 
 from .common import (
-    Client, ClientError, ClientLoginError, ClientCookieExpiredError,
-    __version__, to_json, from_json
+    Client,
+    ClientError,
+    ClientLoginError,
+    ClientCookieExpiredError,
+    __version__,
+    to_json,
+    from_json,
 )

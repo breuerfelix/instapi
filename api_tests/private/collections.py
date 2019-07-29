@@ -1,9 +1,7 @@
 import unittest
 import json
 
-from .common import (
-    ApiTestBase, compat_mock
-)
+from .common import ApiTestBase, compat_mock
 
 
 class CollectionsTests(ApiTestBase):
@@ -14,31 +12,31 @@ class CollectionsTests(ApiTestBase):
         return [
             {
                 'name': 'test_create_collection',
-                'test': CollectionsTests('test_create_collection', api)
+                'test': CollectionsTests('test_create_collection', api),
             },
             {
                 'name': 'test_create_collection_mock',
-                'test': CollectionsTests('test_create_collection_mock', api)
+                'test': CollectionsTests('test_create_collection_mock', api),
             },
             {
                 'name': 'test_collection_feed',
-                'test': CollectionsTests('test_collection_feed', api)
+                'test': CollectionsTests('test_collection_feed', api),
             },
             {
                 'name': 'test_edit_collection',
-                'test': CollectionsTests('test_edit_collection', api)
+                'test': CollectionsTests('test_edit_collection', api),
             },
             {
                 'name': 'test_edit_collection_mock',
-                'test': CollectionsTests('test_edit_collection_mock', api)
+                'test': CollectionsTests('test_edit_collection_mock', api),
             },
             {
                 'name': 'test_delete_collection',
-                'test': CollectionsTests('test_delete_collection', api)
+                'test': CollectionsTests('test_delete_collection', api),
             },
             {
                 'name': 'test_delete_collection_mock',
-                'test': CollectionsTests('test_delete_collection_mock', api)
+                'test': CollectionsTests('test_delete_collection_mock', api),
             },
         ]
 
@@ -65,19 +63,20 @@ class CollectionsTests(ApiTestBase):
         name = 'A Collection'
         call_api.return_value = {
             'status': 'ok',
-            'collection_id': 123, 'collection_name': name}
+            'collection_id': 123,
+            'collection_name': name,
+        }
 
         media_ids = ['1495028858729943288_25025320']
-        params = {'name': name, 'added_media_ids': json.dumps(media_ids, separators=(',', ':'))}
+        params = {
+            'name': name,
+            'added_media_ids': json.dumps(media_ids, separators=(',', ':')),
+        }
         params.update(self.api.authenticated_params)
         self.api.create_collection(name, media_ids)
-        call_api.assert_called_with(
-            'collections/create/',
-            params=params)
+        call_api.assert_called_with('collections/create/', params=params)
         self.api.create_collection(name, media_ids[0])
-        call_api.assert_called_with(
-            'collections/create/',
-            params=params)
+        call_api.assert_called_with('collections/create/', params=params)
 
     @unittest.skip('Modifies data.')
     def test_edit_collection(self):
@@ -85,7 +84,9 @@ class CollectionsTests(ApiTestBase):
         self.assertTrue(results.get('items'), 'No collections')
 
         first_collection_id = results['items'][0]['collection_id']
-        results = self.api.edit_collection(first_collection_id, ['1495028858729943288_25025320'])
+        results = self.api.edit_collection(
+            first_collection_id, ['1495028858729943288_25025320']
+        )
         self.assertEqual(results.get('status'), 'ok')
         self.assertIsNotNone(results.get('collection_id'))
 
@@ -94,7 +95,9 @@ class CollectionsTests(ApiTestBase):
         collection_id = 123
         call_api.return_value = {
             'status': 'ok',
-            'collection_id': collection_id, 'collection_name': 'A Collection'}
+            'collection_id': collection_id,
+            'collection_name': 'A Collection',
+        }
 
         media_ids = ['1495028858729943288_25025320']
         params = {'added_media_ids': json.dumps(media_ids, separators=(',', ':'))}
@@ -102,12 +105,18 @@ class CollectionsTests(ApiTestBase):
 
         self.api.edit_collection(collection_id, media_ids)
         call_api.assert_called_with(
-            'collections/{collection_id!s}/edit/'.format(**{'collection_id': collection_id}),
-            params=params)
+            'collections/{collection_id!s}/edit/'.format(
+                **{'collection_id': collection_id}
+            ),
+            params=params,
+        )
         self.api.edit_collection(collection_id, media_ids[0])
         call_api.assert_called_with(
-            'collections/{collection_id!s}/edit/'.format(**{'collection_id': collection_id}),
-            params=params)
+            'collections/{collection_id!s}/edit/'.format(
+                **{'collection_id': collection_id}
+            ),
+            params=params,
+        )
 
     @unittest.skip('Modifies data.')
     def test_delete_collection(self):
@@ -125,5 +134,8 @@ class CollectionsTests(ApiTestBase):
 
         self.api.delete_collection(collection_id)
         call_api.assert_called_with(
-            'collections/{collection_id!s}/delete/'.format(**{'collection_id': collection_id}),
-            params=self.api.authenticated_params)
+            'collections/{collection_id!s}/delete/'.format(
+                **{'collection_id': collection_id}
+            ),
+            params=self.api.authenticated_params,
+        )

@@ -1,10 +1,13 @@
-# Instagram Private API
+<h2 align="center">Instagram Private API</h2>
+<p align="center">
+    <a href="https://travis-ci.org/breuerfelix/instapi"><img alt="Build Status" src="https://travis-ci.org/breuerfelix/instapi.svg?branch=master"></a>
+    <a href="https://instapi.readthedocs.io/en/latest"><img alt="Documentation Status" src="https://readthedocs.org/projects/instapi/badge/?version=latest"></a>
+    <a href="https://github.com/breuerfelix/instapi/blob/master/LICENSE"><img src="https://img.shields.io/github/license/breuerfelix/instapi.svg" /></a>
+    <a href="https://pypi.org/project/instapi/"><img alt="PyPI" src="https://img.shields.io/pypi/v/instapi"></a>
+    <a href="https://github.com/breuerfelix/instapi"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
+</p>
 
 A Python wrapper for the Instagram private API with no 3rd party dependencies. Supports both the app and web APIs.
-
-![3](https://img.shields.io/badge/Python-3.svg)
-[![docs](https://img.shields.io/badge/docs-readthedocs.io-ff4980.svg?maxAge=2592000)](https://instapi.readthedocs.io/en/latest/)
-[![build](https://img.shields.io/travis/breuerfelix/instapi.svg)](https://travis-ci.org/breuerfelix/instapi)
 
 ## Overview
 
@@ -15,25 +18,21 @@ Problems? Please check the [docs](https://instapi.readthedocs.io/en/latest/) bef
 ## Features
 
 - Supports many functions that are only available through the official app, such as:
-    * Multiple feeds, such as [user feed](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.user_feed), [location feed](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.feed_location), [tag feed](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.feed_tag), [popular feed](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.feed_popular)
-    * Post a [photo](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.post_photo) or [video](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.post_video) to your feed or stories
-    * [Like](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.post_like)/[unlike](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.delete_like) posts
-    * Get [post comments](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.media_comments)
-    * [Post](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.post_comment)/[delete](https://instapi.readthedocs.io/en/latest/api.html#instagram_web_api.Client.delete_comment) comments
+  - Multiple feeds, such as [user feed](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.user_feed), [location feed](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.feed_location), [tag feed](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.feed_tag), [popular feed](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.feed_popular)
+  - Post a [photo](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.post_photo) or [video](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.post_video) to your feed or stories
+  - [Like](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.post_like)/[unlike](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.delete_like) posts
+  - Get [post comments](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.media_comments)
+  - [Post](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.post_comment)/[delete](https://instapi.readthedocs.io/en/latest/api.html#instagram_web_api.Client.delete_comment) comments
     https://instapi.readthedocs.io/en/latest/api/#instapi.Client.comment_unlike
-    * [Like](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.comment_like)/[unlike](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.comment_unlike) comments
-    * [Follow](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.friendships_create)/[unfollow](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.friendships_destroy) users
-    * User [stories](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.user_story_feed)
-    * And [more](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client)!
-- The web api client supports a subset of functions that do not require login, such as:
-    * Get user [info](https://instapi.readthedocs.io/en/latest/api.html#instagram_web_api.Client.user_info) and [feed](https://instapi.readthedocs.io/en/latest/api.html#instagram_web_api.Client.user_feed)
-    * Get [post comments](https://instapi.readthedocs.io/en/latest/api.html#instagram_web_api.Client.media_comments)
-    * And [more](https://instapi.readthedocs.io/en/latest/api.html#instagram_web_api.Client)!
-- Compatible with functions available through the public API using the ClientCompatPatch ([app](https://instapi.readthedocs.io/en/latest/api.html#instapi.ClientCompatPatch)/[web](https://instapi.readthedocs.io/en/latest/api.html#instagram_web_api.ClientCompatPatch)) utility class
+  - [Like](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.comment_like)/[unlike](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.comment_unlike) comments
+  - [Follow](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.friendships_create)/[unfollow](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.friendships_destroy) users
+  - User [stories](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.user_story_feed)
+  - And [more](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client)!
+- Compatible with functions available through the public API using the [ClientCompatPatch](https://instapi.readthedocs.io/en/latest/api.html#instapi.ClientCompatPatch) utility class
 
 ## Documentation
 
-Documentation is available at https://instapi.readthedocs.io
+Documentation is available at [instapi.rtfd.io](https://instapi.readthedocs.io/en/latest/).
 
 ## Install
 

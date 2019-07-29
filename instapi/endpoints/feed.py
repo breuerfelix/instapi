@@ -20,8 +20,10 @@ class FeedEndpointsMixin(object):
         """
         res = self._call_api('feed/liked/', query=kwargs)
         if self.auto_patch and res.get('items'):
-            [ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
-             for m in res.get('items', [])]
+            [
+                ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
+                for m in res.get('items', [])
+            ]
         return res
 
     def feed_timeline(self, **kwargs):
@@ -41,27 +43,35 @@ class FeedEndpointsMixin(object):
         params.update(kwargs)
         res = self._call_api('feed/timeline/', params=params, unsigned=True)
         if self.auto_patch:
-            [ClientCompatPatch.media(m['media_or_ad'], drop_incompat_keys=self.drop_incompat_keys)
-             if m.get('media_or_ad') else m
-             for m in res.get('feed_items', [])]
+            [
+                ClientCompatPatch.media(
+                    m['media_or_ad'], drop_incompat_keys=self.drop_incompat_keys
+                )
+                if m.get('media_or_ad')
+                else m
+                for m in res.get('feed_items', [])
+            ]
         return res
 
-    def feed_popular(self, **kwargs):   # pragma: no cover
+    def feed_popular(self, **kwargs):  # pragma: no cover
         """Get popular feed. This endpoint is believed to be obsolete. Do not use."""
         warnings.warn(
             'This endpoint is believed to be obsolete. Do not use.',
-            ClientDeprecationWarning)
+            ClientDeprecationWarning,
+        )
 
         query = {
             'people_teaser_supported': '1',
             'rank_token': self.rank_token,
-            'ranked_content': 'true'
+            'ranked_content': 'true',
         }
         query.update(kwargs)
         res = self._call_api('feed/popular/', query=query)
         if self.auto_patch:
-            [ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
-             for m in res.get('items', [])]
+            [
+                ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
+                for m in res.get('items', [])
+            ]
         return res
 
     def user_feed(self, user_id, **kwargs):
@@ -78,8 +88,10 @@ class FeedEndpointsMixin(object):
         res = self._call_api(endpoint, query=kwargs)
 
         if self.auto_patch:
-            [ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
-             for m in res.get('items', [])]
+            [
+                ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
+                for m in res.get('items', [])
+            ]
         return res
 
     def self_feed(self, **kwargs):
@@ -96,11 +108,15 @@ class FeedEndpointsMixin(object):
             - **min_timestamp**: For pagination
         :return:
         """
-        endpoint = 'feed/user/{user_name!s}/username/'.format(**{'user_name': user_name})
+        endpoint = 'feed/user/{user_name!s}/username/'.format(
+            **{'user_name': user_name}
+        )
         res = self._call_api(endpoint, query=kwargs)
         if self.auto_patch:
-            [ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
-             for m in res.get('items', [])]
+            [
+                ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
+                for m in res.get('items', [])
+            ]
         return res
 
     def reels_tray(self, **kwargs):
@@ -110,8 +126,12 @@ class FeedEndpointsMixin(object):
             for u in res.get('tray', []):
                 if not u.get('items'):
                     continue
-                [ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
-                 for m in u.get('items', [])]
+                [
+                    ClientCompatPatch.media(
+                        m, drop_incompat_keys=self.drop_incompat_keys
+                    )
+                    for m in u.get('items', [])
+                ]
         return res
 
     def user_reel_media(self, user_id, **kwargs):
@@ -125,8 +145,10 @@ class FeedEndpointsMixin(object):
         endpoint = 'feed/user/{user_id!s}/reel_media/'.format(**{'user_id': user_id})
         res = self._call_api(endpoint, query=kwargs)
         if self.auto_patch:
-            [ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
-             for m in res.get('items', [])]
+            [
+                ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
+                for m in res.get('items', [])
+            ]
         return res
 
     def reels_media(self, user_ids, **kwargs):
@@ -144,11 +166,19 @@ class FeedEndpointsMixin(object):
         res = self._call_api('feed/reels_media/', params=params)
         if self.auto_patch:
             for reel_media in res.get('reels_media', []):
-                [ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
-                 for m in reel_media.get('items', [])]
+                [
+                    ClientCompatPatch.media(
+                        m, drop_incompat_keys=self.drop_incompat_keys
+                    )
+                    for m in reel_media.get('items', [])
+                ]
             for _, reel in list(res.get('reels', {}).items()):
-                [ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
-                 for m in reel.get('items', [])]
+                [
+                    ClientCompatPatch.media(
+                        m, drop_incompat_keys=self.drop_incompat_keys
+                    )
+                    for m in reel.get('items', [])
+                ]
         return res
 
     def feed_tag(self, tag, rank_token, **kwargs):
@@ -163,23 +193,34 @@ class FeedEndpointsMixin(object):
         """
         raise_if_invalid_rank_token(rank_token)
 
-        query_params = {
-            'rank_token': rank_token
-        }
+        query_params = {'rank_token': rank_token}
         query_params.update(kwargs)
         endpoint = 'feed/tag/{tag!s}/'.format(
-            **{'tag': compat_urllib_parse.quote(tag.encode('utf8'))})
+            **{'tag': compat_urllib_parse.quote(tag.encode('utf8'))}
+        )
         res = self._call_api(endpoint, query=query_params)
         if self.auto_patch:
             if res.get('items'):
-                [ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
-                 for m in res.get('items', [])]
+                [
+                    ClientCompatPatch.media(
+                        m, drop_incompat_keys=self.drop_incompat_keys
+                    )
+                    for m in res.get('items', [])
+                ]
             if res.get('ranked_items'):
-                [ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
-                 for m in res.get('ranked_items', [])]
+                [
+                    ClientCompatPatch.media(
+                        m, drop_incompat_keys=self.drop_incompat_keys
+                    )
+                    for m in res.get('ranked_items', [])
+                ]
             if res.get('story', {}).get('items'):
-                [ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
-                 for m in res.get('story', {}).get('items', [])]
+                [
+                    ClientCompatPatch.media(
+                        m, drop_incompat_keys=self.drop_incompat_keys
+                    )
+                    for m in res.get('story', {}).get('items', [])
+                ]
         return res
 
     def user_story_feed(self, user_id):
@@ -192,8 +233,10 @@ class FeedEndpointsMixin(object):
         endpoint = 'feed/user/{user_id!s}/story/'.format(**{'user_id': user_id})
         res = self._call_api(endpoint)
         if self.auto_patch and res.get('reel'):
-            [ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
-             for m in res.get('reel', {}).get('items', [])]
+            [
+                ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
+                for m in res.get('reel', {}).get('items', [])
+            ]
         return res
 
     def feed_location(self, location_id, rank_token, **kwargs):
@@ -207,26 +250,39 @@ class FeedEndpointsMixin(object):
         """
         warnings.warn(
             'This endpoint is believed to be obsolete. Do not use.',
-            ClientDeprecationWarning)
+            ClientDeprecationWarning,
+        )
 
         raise_if_invalid_rank_token(rank_token)
 
-        endpoint = 'feed/location/{location_id!s}/'.format(**{'location_id': location_id})
-        query_params = {
-            'rank_token': rank_token,
-        }
+        endpoint = 'feed/location/{location_id!s}/'.format(
+            **{'location_id': location_id}
+        )
+        query_params = {'rank_token': rank_token}
         query_params.update(kwargs)
         res = self._call_api(endpoint, query=query_params)
         if self.auto_patch:
             if res.get('items'):
-                [ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
-                 for m in res.get('items', [])]
+                [
+                    ClientCompatPatch.media(
+                        m, drop_incompat_keys=self.drop_incompat_keys
+                    )
+                    for m in res.get('items', [])
+                ]
             if res.get('ranked_items'):
-                [ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
-                 for m in res.get('ranked_items', [])]
+                [
+                    ClientCompatPatch.media(
+                        m, drop_incompat_keys=self.drop_incompat_keys
+                    )
+                    for m in res.get('ranked_items', [])
+                ]
             if res.get('story', {}).get('items'):
-                [ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
-                 for m in res.get('story', {}).get('items', [])]
+                [
+                    ClientCompatPatch.media(
+                        m, drop_incompat_keys=self.drop_incompat_keys
+                    )
+                    for m in res.get('story', {}).get('items', [])
+                ]
         return res
 
     def saved_feed(self, **kwargs):
@@ -239,8 +295,13 @@ class FeedEndpointsMixin(object):
         """
         res = self._call_api('feed/saved/', query=kwargs)
         if self.auto_patch:
-            [ClientCompatPatch.media(m['media'], drop_incompat_keys=self.drop_incompat_keys)
-             for m in res.get('items', []) if m.get('media')]
+            [
+                ClientCompatPatch.media(
+                    m['media'], drop_incompat_keys=self.drop_incompat_keys
+                )
+                for m in res.get('items', [])
+                if m.get('media')
+            ]
         return res
 
     def feed_only_me(self, **kwargs):
@@ -251,6 +312,8 @@ class FeedEndpointsMixin(object):
         """
         res = self._call_api('feed/only_me_feed/', query=kwargs)
         if self.auto_patch:
-            [ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
-             for m in res.get('items', [])]
+            [
+                ClientCompatPatch.media(m, drop_incompat_keys=self.drop_incompat_keys)
+                for m in res.get('items', [])
+            ]
         return res

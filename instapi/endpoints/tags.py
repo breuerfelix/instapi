@@ -16,7 +16,8 @@ class TagsEndpointsMixin(object):
         :return:
         """
         endpoint = 'tags/{tag!s}/info/'.format(
-            **{'tag': compat_urllib_parse.quote(tag.encode('utf8'))})
+            **{'tag': compat_urllib_parse.quote(tag.encode('utf8'))}
+        )
         res = self._call_api(endpoint)
         return res
 
@@ -28,10 +29,14 @@ class TagsEndpointsMixin(object):
         :return:
         """
         endpoint = 'tags/{tag!s}/related/'.format(
-            **{'tag': compat_urllib_parse.quote(tag.encode('utf8'))})
+            **{'tag': compat_urllib_parse.quote(tag.encode('utf8'))}
+        )
         query = {
-            'visited': json.dumps([{'id': tag, 'type': 'hashtag'}], separators=(',', ':')),
-            'related_types': json.dumps(['hashtag', 'location'], separators=(',', ':'))}
+            'visited': json.dumps(
+                [{'id': tag, 'type': 'hashtag'}], separators=(',', ':')
+            ),
+            'related_types': json.dumps(['hashtag', 'location'], separators=(',', ':')),
+        }
         res = self._call_api(endpoint, query=query)
         return res
 
@@ -81,7 +86,8 @@ class TagsEndpointsMixin(object):
         :return:
         """
         endpoint = 'tags/follow/{hashtag!s}/'.format(
-            hashtag=compat_urllib_parse.quote(tag.encode('utf-8')))
+            hashtag=compat_urllib_parse.quote(tag.encode('utf-8'))
+        )
         return self._call_api(endpoint, params=self.authenticated_params)
 
     def tag_unfollow(self, tag):
@@ -92,7 +98,8 @@ class TagsEndpointsMixin(object):
         :return:
         """
         endpoint = 'tags/unfollow/{hashtag!s}/'.format(
-            hashtag=compat_urllib_parse.quote(tag.encode('utf-8')))
+            hashtag=compat_urllib_parse.quote(tag.encode('utf-8'))
+        )
         return self._call_api(endpoint, params=self.authenticated_params)
 
     def tag_section(self, tag, tab='top', **kwargs):
@@ -114,7 +121,8 @@ class TagsEndpointsMixin(object):
 
         extract_media_only = kwargs.pop('extract', False)
         endpoint = 'tags/{tag!s}/sections/'.format(
-            **{'tag': compat_urllib_parse.quote(tag.encode('utf8'))})
+            **{'tag': compat_urllib_parse.quote(tag.encode('utf8'))}
+        )
 
         params = {
             'supported_tabs': json.dumps(valid_tabs, separators=(',', ':')),
@@ -128,7 +136,9 @@ class TagsEndpointsMixin(object):
         if kwargs.get('page'):
             params['page'] = kwargs.pop('page')
         if kwargs.get('next_media_ids'):
-            params['next_media_ids'] = json.dumps(kwargs.pop('next_media_ids'), separators=(',', ':'))
+            params['next_media_ids'] = json.dumps(
+                kwargs.pop('next_media_ids'), separators=(',', ':')
+            )
         kwargs.pop('max_id', None)
         kwargs.pop('page', None)
         kwargs.pop('next_media_ids', None)
@@ -140,7 +150,9 @@ class TagsEndpointsMixin(object):
             for s in results.get('sections', []):
                 for m in s.get('layout_content', {}).get('medias', []):
                     if m.get('media'):
-                        ClientCompatPatch.media(m['media'], drop_incompat_keys=self.drop_incompat_keys)
+                        ClientCompatPatch.media(
+                            m['media'], drop_incompat_keys=self.drop_incompat_keys
+                        )
                         if extract_media_only:
                             extracted_medias.append(m['media'])
         if extract_media_only:

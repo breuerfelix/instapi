@@ -15,11 +15,18 @@ class CollectionsEndpointsMixin(object):
         :param collection_id: Collection ID
         :return:
         """
-        endpoint = 'feed/collection/{collection_id!s}/'.format(**{'collection_id': collection_id})
+        endpoint = 'feed/collection/{collection_id!s}/'.format(
+            **{'collection_id': collection_id}
+        )
         res = self._call_api(endpoint, query=kwargs)
         if self.auto_patch and res.get('items'):
-            [ClientCompatPatch.media(m['media'], drop_incompat_keys=self.drop_incompat_keys)
-             for m in res.get('items', []) if m.get('media')]
+            [
+                ClientCompatPatch.media(
+                    m['media'], drop_incompat_keys=self.drop_incompat_keys
+                )
+                for m in res.get('items', [])
+                if m.get('media')
+            ]
         return res
 
     def create_collection(self, name, added_media_ids=None):
@@ -57,7 +64,9 @@ class CollectionsEndpointsMixin(object):
         if added_media_ids and isinstance(added_media_ids, str):
             added_media_ids = [added_media_ids]
         if added_media_ids:
-            params['added_media_ids'] = json.dumps(added_media_ids, separators=(',', ':'))
+            params['added_media_ids'] = json.dumps(
+                added_media_ids, separators=(',', ':')
+            )
         params.update(self.authenticated_params)
         return self._call_api('collections/create/', params=params)
 
@@ -71,11 +80,11 @@ class CollectionsEndpointsMixin(object):
         """
         if isinstance(added_media_ids, str):
             added_media_ids = [added_media_ids]
-        params = {
-            'added_media_ids': json.dumps(added_media_ids, separators=(',', ':'))
-        }
+        params = {'added_media_ids': json.dumps(added_media_ids, separators=(',', ':'))}
         params.update(self.authenticated_params)
-        endpoint = 'collections/{collection_id!s}/edit/'.format(**{'collection_id': collection_id})
+        endpoint = 'collections/{collection_id!s}/edit/'.format(
+            **{'collection_id': collection_id}
+        )
         return self._call_api(endpoint, params=params)
 
     def delete_collection(self, collection_id):
@@ -91,5 +100,7 @@ class CollectionsEndpointsMixin(object):
                 }
         """
         params = self.authenticated_params
-        endpoint = 'collections/{collection_id!s}/delete/'.format(**{'collection_id': collection_id})
+        endpoint = 'collections/{collection_id!s}/delete/'.format(
+            **{'collection_id': collection_id}
+        )
         return self._call_api(endpoint, params=params)

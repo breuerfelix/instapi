@@ -11,15 +11,17 @@ class UsertagsTests(ApiTestBase):
         return [
             {
                 'name': 'test_usertag_feed',
-                'test': UsertagsTests('test_usertag_feed', api, user_id='329452045')
+                'test': UsertagsTests('test_usertag_feed', api, user_id='329452045'),
             },
             {
                 'name': 'test_usertag_self_remove',
-                'test': UsertagsTests('test_usertag_self_remove', api, media_id='???')
+                'test': UsertagsTests('test_usertag_self_remove', api, media_id='???'),
             },
             {
                 'name': 'test_usertag_self_remove_mock',
-                'test': UsertagsTests('test_usertag_self_remove_mock', api, media_id='???')
+                'test': UsertagsTests(
+                    'test_usertag_self_remove_mock', api, media_id='???'
+                ),
             },
         ]
 
@@ -40,16 +42,21 @@ class UsertagsTests(ApiTestBase):
         call_api.return_value = {
             'status': 'ok',
             'media': {
-                'pk': 123, 'code': 'abc', 'taken_at': 1234567890,
-                'media_type': 1, 'caption': None,
+                'pk': 123,
+                'code': 'abc',
+                'taken_at': 1234567890,
+                'media_type': 1,
+                'caption': None,
                 'user': {
-                    'pk': 123, 'biography': '',
+                    'pk': 123,
+                    'biography': '',
                     'profile_pic_url': 'https://example.com/x.jpg',
-                    'external_url': ''
-                }
-            }
+                    'external_url': '',
+                },
+            },
         }
         self.api.usertag_self_remove(media_id)
         call_api.assert_called_with(
             'usertags/{media_id!s}/remove/'.format(**{'media_id': media_id}),
-            params=self.api.authenticated_params)
+            params=self.api.authenticated_params,
+        )

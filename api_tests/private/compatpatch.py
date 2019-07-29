@@ -12,19 +12,25 @@ class CompatPatchTests(ApiTestBase):
         return [
             {
                 'name': 'test_compat_media',
-                'test': CompatPatchTests('test_compat_media', api, media_id=test_media_id)
+                'test': CompatPatchTests(
+                    'test_compat_media', api, media_id=test_media_id
+                ),
             },
             {
                 'name': 'test_compat_comment',
-                'test': CompatPatchTests('test_compat_comment', api, media_id=test_media_id)
+                'test': CompatPatchTests(
+                    'test_compat_comment', api, media_id=test_media_id
+                ),
             },
             {
                 'name': 'test_compat_user',
-                'test': CompatPatchTests('test_compat_user', api, user_id='124317')
+                'test': CompatPatchTests('test_compat_user', api, user_id='124317'),
             },
             {
                 'name': 'test_compat_user_list',
-                'test': CompatPatchTests('test_compat_user_list', api, user_id='124317')
+                'test': CompatPatchTests(
+                    'test_compat_user_list', api, user_id='124317'
+                ),
             },
         ]
 

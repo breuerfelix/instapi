@@ -6,13 +6,16 @@ from os import path
 package_name = 'instapi'
 here = path.abspath(path.dirname(__file__))
 
+
 def readall(*args):
     with open(path.join(here, *args), encoding='utf-8') as fp:
         return fp.read()
 
+
 def writeall(*args, content):
     with open(path.join(here, *args), 'w+', encoding='utf-8') as fp:
         return fp.write(content)
+
 
 def bump():
     response = request.urlopen(f'https://pypi.org/pypi/{package_name}/json')
@@ -24,7 +27,8 @@ def bump():
     print('current version: ', version)
 
     # version does not exist so do not bump
-    if version not in releases: return
+    if version not in releases:
+        return
 
     # bump version
     v_split = version.split('.')
@@ -35,7 +39,7 @@ def bump():
 
     print('new version: ', new_version)
 
-    writeall(f'../{package_name}', 'version.txt', content = new_version)
+    writeall(f'../{package_name}', 'version.txt', content=new_version)
 
 
 if __name__ == '__main__':

@@ -19,15 +19,22 @@ class DiscoverEndpointsMixin(object):
         query.update(kwargs)
         res = self._call_api('discover/explore/', query=query)
         if self.auto_patch:
-            [ClientCompatPatch.media(item['media'], drop_incompat_keys=self.drop_incompat_keys)
-             if item.get('media') else item for item in res['items']]
+            [
+                ClientCompatPatch.media(
+                    item['media'], drop_incompat_keys=self.drop_incompat_keys
+                )
+                if item.get('media')
+                else item
+                for item in res['items']
+            ]
         return res
 
-    def discover_channels_home(self):       # pragma: no cover
+    def discover_channels_home(self):  # pragma: no cover
         """Discover channels home"""
         warnings.warn(
             'This endpoint is believed to be obsolete. Do not use.',
-            ClientDeprecationWarning)
+            ClientDeprecationWarning,
+        )
 
         res = self._call_api('discover/channels_home/')
         if self.auto_patch:

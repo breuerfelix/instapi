@@ -12,10 +12,15 @@ class FriendshipsEndpointsMixin(object):
         """User list for autocomplete"""
         res = self._call_api(
             'friendships/autocomplete_user_list/',
-            query={'followinfo': 'True', 'version': '2'})
+            query={'followinfo': 'True', 'version': '2'},
+        )
         if self.auto_patch:
-            [ClientCompatPatch.list_user(user, drop_incompat_keys=self.drop_incompat_keys)
-             for user in res['users']]
+            [
+                ClientCompatPatch.list_user(
+                    user, drop_incompat_keys=self.drop_incompat_keys
+                )
+                for user in res['users']
+            ]
         return res
 
     def user_following(self, user_id, rank_token, **kwargs):
@@ -33,14 +38,16 @@ class FriendshipsEndpointsMixin(object):
         raise_if_invalid_rank_token(rank_token)
 
         endpoint = 'friendships/{user_id!s}/following/'.format(**{'user_id': user_id})
-        query_params = {
-            'rank_token': rank_token,
-        }
+        query_params = {'rank_token': rank_token}
         query_params.update(kwargs)
         res = self._call_api(endpoint, query=query_params)
         if self.auto_patch:
-            [ClientCompatPatch.list_user(u, drop_incompat_keys=self.drop_incompat_keys)
-             for u in res.get('users', [])]
+            [
+                ClientCompatPatch.list_user(
+                    u, drop_incompat_keys=self.drop_incompat_keys
+                )
+                for u in res.get('users', [])
+            ]
         return res
 
     def user_followers(self, user_id, rank_token, **kwargs):
@@ -58,22 +65,28 @@ class FriendshipsEndpointsMixin(object):
         raise_if_invalid_rank_token(rank_token)
 
         endpoint = 'friendships/{user_id!s}/followers/'.format(**{'user_id': user_id})
-        query_params = {
-            'rank_token': rank_token,
-        }
+        query_params = {'rank_token': rank_token}
         query_params.update(kwargs)
         res = self._call_api(endpoint, query=query_params)
         if self.auto_patch:
-            [ClientCompatPatch.list_user(u, drop_incompat_keys=self.drop_incompat_keys)
-             for u in res.get('users', [])]
+            [
+                ClientCompatPatch.list_user(
+                    u, drop_incompat_keys=self.drop_incompat_keys
+                )
+                for u in res.get('users', [])
+            ]
         return res
 
     def friendships_pending(self):
         """Get pending follow requests"""
         res = self._call_api('friendships/pending/')
         if self.auto_patch and res.get('users'):
-            [ClientCompatPatch.list_user(u, drop_incompat_keys=self.drop_incompat_keys)
-             for u in res.get('users', [])]
+            [
+                ClientCompatPatch.list_user(
+                    u, drop_incompat_keys=self.drop_incompat_keys
+                )
+                for u in res.get('users', [])
+            ]
         return res
 
     def friendships_show(self, user_id):
@@ -126,7 +139,7 @@ class FriendshipsEndpointsMixin(object):
         params = {
             '_uuid': self.uuid,
             '_csrftoken': self.csrftoken,
-            'user_ids': ','.join(user_ids)
+            'user_ids': ','.join(user_ids),
         }
         res = self._call_api('friendships/show_many/', params=params, unsigned=True)
         return res
@@ -256,7 +269,9 @@ class FriendshipsEndpointsMixin(object):
                     "is_private": false
                 }
         """
-        endpoint = 'friendships/block_friend_reel/{user_id!s}/'.format(**{'user_id': user_id})
+        endpoint = 'friendships/block_friend_reel/{user_id!s}/'.format(
+            **{'user_id': user_id}
+        )
         params = {'source': 'main_feed'}
         params.update(self.authenticated_params)
         res = self._call_api(endpoint, params=params)
@@ -282,7 +297,9 @@ class FriendshipsEndpointsMixin(object):
                     "is_private": false
                 }
         """
-        endpoint = 'friendships/unblock_friend_reel/{user_id!s}/'.format(**{'user_id': user_id})
+        endpoint = 'friendships/unblock_friend_reel/{user_id!s}/'.format(
+            **{'user_id': user_id}
+        )
         res = self._call_api(endpoint, params=self.authenticated_params)
         return res
 
@@ -334,11 +351,19 @@ class FriendshipsEndpointsMixin(object):
         """
         Get list of users from whom you've hid your stories
         """
-        warnings.warn('This endpoint is experimental. Do not use.', ClientExperimentalWarning)
-        res = self._call_api('friendships/blocked_reels/', params=self.authenticated_params)
+        warnings.warn(
+            'This endpoint is experimental. Do not use.', ClientExperimentalWarning
+        )
+        res = self._call_api(
+            'friendships/blocked_reels/', params=self.authenticated_params
+        )
         if self.auto_patch and res.get('users'):
-            [ClientCompatPatch.list_user(u, drop_incompat_keys=self.drop_incompat_keys)
-             for u in res.get('users', [])]
+            [
+                ClientCompatPatch.list_user(
+                    u, drop_incompat_keys=self.drop_incompat_keys
+                )
+                for u in res.get('users', [])
+            ]
         return res
 
     def enable_post_notifications(self, user_id):
@@ -350,7 +375,8 @@ class FriendshipsEndpointsMixin(object):
         """
         res = self._call_api(
             'friendships/favorite/{user_id!s}/'.format(**{'user_id': user_id}),
-            params=self.authenticated_params)
+            params=self.authenticated_params,
+        )
         return res
 
     def disable_post_notifications(self, user_id):
@@ -362,7 +388,8 @@ class FriendshipsEndpointsMixin(object):
         """
         res = self._call_api(
             'friendships/unfavorite/{user_id!s}/'.format(**{'user_id': user_id}),
-            params=self.authenticated_params)
+            params=self.authenticated_params,
+        )
         return res
 
     def ignore_user(self, user_id):
@@ -376,7 +403,8 @@ class FriendshipsEndpointsMixin(object):
         params.update(self.authenticated_params)
         res = self._call_api(
             'friendships/ignore/{user_id!s}/'.format(**{'user_id': user_id}),
-            params=params)
+            params=params,
+        )
         return res
 
     def remove_follower(self, user_id):
@@ -390,5 +418,6 @@ class FriendshipsEndpointsMixin(object):
         params.update(self.authenticated_params)
         res = self._call_api(
             'friendships/remove_follower/{user_id!s}/'.format(**{'user_id': user_id}),
-            params=params)
+            params=params,
+        )
         return res
