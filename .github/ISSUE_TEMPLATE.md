@@ -1,4 +1,4 @@
-## Please follow the guide below
+# Please follow the guide below
 
 - Issues submitted without this template format will be **ignored**.
 - Please read the questions **carefully** and answer completely.
@@ -10,19 +10,16 @@
 
 ---
 
-### Before submitting an issue, make sure you have:
+## Before submitting an issue, make sure you have
+
 - [ ] Updated to the lastest version v1.6.0
 - [ ] Read the [README](https://github.com/breuerfelix/instapi/blob/master/README.md) and [docs](https://instapi.readthedocs.io/en/latest/)
 - [ ] [Searched](https://github.com/breuerfelix/instapi/search?type=Issues) the bugtracker for similar issues including **closed** ones
 - [ ] Reviewed the sample code in [tests](https://github.com/breuerfelix/instapi/tree/master/tests) and [examples](https://github.com/breuerfelix/instapi/tree/master/examples)
 
-### Which client are you using?
-- [ ] app (``instapi/``)
-- [ ] web (``instagram_web_api/``)
-
 ---
 
-### Describe your issue
+## Describe your issue
 
 Please make sure the description is worded well enough to be understood with as much context and examples as possible.
 
