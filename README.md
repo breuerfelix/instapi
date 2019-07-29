@@ -7,7 +7,7 @@
     <a href="https://github.com/breuerfelix/instapi"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 </p>
 
-A Python wrapper for the Instagram private API with no 3rd party dependencies. Supports both the app and web APIs.
+A Python wrapper for the Instagram private API with no 3rd party dependencies.
 
 ## Overview
 
