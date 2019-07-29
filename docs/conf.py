@@ -63,7 +63,7 @@ def readall(*args):
     with open(os.path.join(here, *args), encoding='utf-8') as fp:
         return fp.read()
 
-version = readall('../instapi' + 'version.txt')
+version = readall('../instapi', 'version.txt')
 # The full version, including alpha/beta/rc tags.
 release = version
 
