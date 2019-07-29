@@ -7,7 +7,7 @@ import logging
 import re
 import warnings
 
-from .private import (
+from private import (
     AccountTests, CollectionsTests, DiscoverTests,
     FeedTests, FriendshipTests, LiveTests,
     LocationTests, MediaTests, MiscTests,
@@ -16,7 +16,8 @@ from .private import (
     ClientTests, ApiUtilsTests, CompatPatchTests,
     IGTVTests,
 )
-from .common import (
+
+from private import (
     Client, ClientError, ClientLoginError, ClientCookieExpiredError,
     __version__, to_json, from_json
 )
@@ -30,7 +31,7 @@ if __name__ == '__main__':
     logger.setLevel(logging.WARNING)
 
     # Example command:
-    #   python test_private_api.py -u "xxx" -p "xxx" -settings "saved_auth.json" -save
+    #   python test.py -u "xxx" -p "xxx" -settings "saved_auth.json" -save
 
     parser = argparse.ArgumentParser(description='Test instapi.py')
     parser.add_argument('-settings', '--settings', dest='settings_file_path', type=str, required=True)
