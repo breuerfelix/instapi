@@ -2,18 +2,10 @@ import json
 import os.path
 import logging
 import argparse
-try:
-    from instapi import (
-        Client, __version__ as client_version)
-except ImportError:
-    import sys
-    sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-    from instapi import (
-        Client, __version__ as client_version)
+from instapi import (Client, __version__ as client_version)
 
 
 if __name__ == '__main__':
-
     logging.basicConfig()
     logger = logging.getLogger('instapi')
     logger.setLevel(logging.WARNING)

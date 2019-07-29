@@ -1,5 +1,3 @@
-# flake8: noqa
-# pylint: disable=unused-import
 try:
     import urllib.request as compat_urllib_request
 except ImportError:  # Python 2

@@ -4,19 +4,10 @@ import datetime
 import os.path
 import logging
 import argparse
-try:
-    from instapi import (
-        Client, ClientError, ClientLoginError,
-        ClientCookieExpiredError, ClientLoginRequiredError,
-        __version__ as client_version)
-except ImportError:
-    import sys
-    sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-    from instapi import (
-        Client, ClientError, ClientLoginError,
-        ClientCookieExpiredError, ClientLoginRequiredError,
-        __version__ as client_version)
-
+from instapi import (
+    Client, ClientError, ClientLoginError,
+    ClientCookieExpiredError, ClientLoginRequiredError,
+    __version__ as client_version)
 
 def to_json(python_object):
     if isinstance(python_object, bytes):
