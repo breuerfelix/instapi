@@ -3,7 +3,6 @@
 A Python wrapper for the Instagram private API with no 3rd party dependencies. Supports both the app and web APIs.
 
 ![3](https://img.shields.io/badge/Python-3.svg)
-[![release](https://img.shields.io/github/release/breuerfelix/instapi.svg?colorB=ff7043)](https://github.com/breuerfelix/instapi/releases)
 [![docs](https://img.shields.io/badge/docs-readthedocs.io-ff4980.svg?maxAge=2592000)](https://instapi.readthedocs.io/en/latest/)
 [![build](https://img.shields.io/travis/breuerfelix/instapi.svg)](https://travis-ci.org/breuerfelix/instapi)
 
@@ -21,6 +20,7 @@ Problems? Please check the [docs](https://instapi.readthedocs.io/en/latest/) bef
     * [Like](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.post_like)/[unlike](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.delete_like) posts
     * Get [post comments](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.media_comments)
     * [Post](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.post_comment)/[delete](https://instapi.readthedocs.io/en/latest/api.html#instagram_web_api.Client.delete_comment) comments
+    https://instapi.readthedocs.io/en/latest/api/#instapi.Client.comment_unlike
     * [Like](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.comment_like)/[unlike](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.comment_unlike) comments
     * [Follow](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.friendships_create)/[unfollow](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.friendships_destroy) users
     * User [stories](https://instapi.readthedocs.io/en/latest/api.html#instapi.Client.user_story_feed)
@@ -30,9 +30,6 @@ Problems? Please check the [docs](https://instapi.readthedocs.io/en/latest/) bef
     * Get [post comments](https://instapi.readthedocs.io/en/latest/api.html#instagram_web_api.Client.media_comments)
     * And [more](https://instapi.readthedocs.io/en/latest/api.html#instagram_web_api.Client)!
 - Compatible with functions available through the public API using the ClientCompatPatch ([app](https://instapi.readthedocs.io/en/latest/api.html#instapi.ClientCompatPatch)/[web](https://instapi.readthedocs.io/en/latest/api.html#instagram_web_api.ClientCompatPatch)) utility class
-- Beta Python 3 support
-
-An [extension module](https://github.com/breuerfelix/instapi_extensions) is available to help with common tasks like pagination, posting photos or videos.
 
 ## Documentation
 
